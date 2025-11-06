@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "vet-finder",
+    "slug": "vet-finder",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/paw.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/paw.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": { "supportsTablet": true },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/paw.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": { "favicon": "./assets/paw.png" }
+  }
+}
