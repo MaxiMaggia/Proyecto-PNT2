@@ -1,7 +1,9 @@
+// AppBar reutilizable que provee controles de encabezado para distintas pantallas.
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import styles from './styles';
 
+// Renderiza el encabezado con acciones configurables que utilizan las pantallas vía navegación.
 export default function AppBar({
   title = '',
   onLeftPress,

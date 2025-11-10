@@ -1,8 +1,10 @@
-// Boot de sesión. 
+// Boot de sesión para sincronizar el contexto de autenticación con la persistencia prevista.
 import { useEffect } from 'react';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Inicializa el estado de login en `AuthContext` leyendo (futuro) el almacenamiento seguro.
 export default function useHydrateAuth(setIsLogged) {
+  // Ejecuta la verificación una sola vez y cancela consecuencias cuando se desmonta.
   useEffect(() => {
     let active = true;
     (async () => {

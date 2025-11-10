@@ -27,11 +27,11 @@ cp .env.example .env
 npm run dev
 
 Listar todas las mascotas:
-GET http://192.168.0.3:4000/api/pets
+GET http:// /api/pets
 
 
 Frontend (Expo)
 Terminal 2 – PowerShell en Windows
 cd frontend
-$env:EXPO_PUBLIC_API_URL="http://192.168.0.3:4000"
+$env:EXPO_PUBLIC_API_URL=" "
 npm start

@@ -1,7 +1,9 @@
+// Definiciones de estilo específicas para el componente AppBar compartido.
 import { StyleSheet } from 'react-native';
 
 const GREEN = '#13ec13';
 
+// Hoja de estilos exportada y consumida por `components/AppBar/index.js`.
 export default StyleSheet.create({
   container: {
     height: 64,

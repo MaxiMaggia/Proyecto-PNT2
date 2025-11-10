@@ -1,7 +1,8 @@
-// Input base para unificar paddings/colores.
+// Input base para unificar paddings/colores en formularios como AddPet y Login.
 import React from 'react';
 import { TextInput } from 'react-native';
 
+// Propaga props de TextInput aplicando estilo coherente con componentes de formularios.
 export default function Input(props) {
   return (
     <TextInput

@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿// Pantalla que lista mascotas almacenadas en el contexto y permite navegar a su edición.
+import React from 'react';
 import { View, Text, Pressable, FlatList, Image } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import styles from './styles';
@@ -6,12 +7,16 @@ import { usePets } from '../../context/PetsContext';
 import useFocusData from '../../hooks/useFocusData';
 import EmptyState from '../../components/ui/EmptyState';
 
+// Consume `PetsContext` para renderizar el catálogo y delega al formulario de `AddPet`.
 export default function PetList({ navigation }) {
   const insets = useSafeAreaInsets();
   const { pets, loading } = usePets();
+  // Rehidrata la lista cuando el contexto cambia para mantener la vista sincronizada.
   const { data: list = [] } = useFocusData(async () => pets, [pets.length]);
 
+  // Retorna al mapa principal reemplazando el stack con la ruta raíz.
   const goBackToMap = () => navigation.reset({ index: 0, routes: [{ name: 'Map' }] });
+  // Abre el formulario `AddPet` pasando la mascota seleccionada para edición.
   const goEdit = (pet) => navigation.navigate('AddPet', { pet });
 
   return (

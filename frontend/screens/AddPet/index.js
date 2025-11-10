@@ -1,4 +1,5 @@
-﻿import React, { useMemo, useState, useEffect } from 'react';
+﻿// Pantalla para crear/editar mascotas, conectada al contexto y servicios de razas.
+import React, { useMemo, useState, useEffect } from 'react';
 import { View, Text, Pressable, Platform, KeyboardAvoidingView, ScrollView, Image } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -10,6 +11,7 @@ import { parseISOtoDate, formatDateDDMMYYYY } from '../../utils/date';
 import { getBreedsByType } from '../../services/breeds';
 import { useDebouncedValue } from '../../hooks/useDebounce';
 
+// Gestiona el formulario y coordina acciones en `PetsContext` y servicios auxiliares.
 export default function AddPet({ navigation, route }) {
   const insets = useSafeAreaInsets();
   const { addPet, updatePet, deletePet } = usePets();
@@ -17,6 +19,7 @@ export default function AddPet({ navigation, route }) {
   const pet = route?.params?.pet || null;
   const isEdit = !!pet;
 
+  // Memoriza la fecha inicial según mascota proveniente de `PetsContext`.
   const initialDate = useMemo(
     () => parseISOtoDate(pet?.birthDate) || new Date(2020, 4, 15),
     [pet]
@@ -33,6 +36,7 @@ export default function AddPet({ navigation, route }) {
   const [openSuggest, setOpenSuggest] = useState(false);
   const debouncedQuery = useDebouncedValue(breedQuery, 700);
 
+  // Sincroniza campos cuando la pantalla recibe una mascota para edición.
   useEffect(() => {
     if (isEdit) {
       setName(pet?.name || '');
@@ -43,6 +47,7 @@ export default function AddPet({ navigation, route }) {
     }
   }, [isEdit, pet]);
 
+  // Busca razas sugiriendo resultados en función del tipo seleccionado y la query.
   useEffect(() => {
     const q = debouncedQuery.trim();
     const normalizedType = (type || '').trim();
@@ -77,13 +82,16 @@ export default function AddPet({ navigation, route }) {
     };
   }, [debouncedQuery, type]);
 
+  // Vuelve a la pantalla anterior reutilizando la pila de navegación principal.
   const goBack = () => navigation.goBack();
 
+  // Maneja la fecha desde el picker y cierra el modal según plataforma.
   const onChangeDate = (_ev, selected) => {
     if (Platform.OS === 'android') setShowPicker(false);
     if (selected) setBirthDate(selected);
   };
 
+  // Persiste la mascota mediante `PetsContext` creando o actualizando en la API.
   const handleSave = async () => {
     const payload = {
       name: name.trim() || 'Mi mascota',
@@ -105,6 +113,7 @@ export default function AddPet({ navigation, route }) {
     }
   };
 
+  // Eliminación delegada al contexto para mantener consistencia global.
   const handleDelete = async () => {
     if (!isEdit) return;
     await deletePet(pet.id);

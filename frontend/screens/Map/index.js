@@ -24,6 +24,7 @@ import useFocusData from '../../hooks/useFocusData';
 import vetsData from '../../data/vets';
 import AppBar from '../../components/AppBar';
 
+// Renderiza estrellas de puntuación para tarjetas y paneles de veterinarias.
 function Stars({ rating = 0 }) {
   const full = Math.floor(rating);
   const half = rating - full >= 0.5 ? 1 : 0;
@@ -37,6 +38,7 @@ function Stars({ rating = 0 }) {
   );
 }
 
+// Pantalla que combina AppBar, Sheet y datos mock para navegar desde el mapa a otras vistas.
 export default function MapScreen({ navigation }) {
   const insets = useSafeAreaInsets();
 
@@ -46,6 +48,7 @@ export default function MapScreen({ navigation }) {
   const [routingTo, setRoutingTo] = useState(null);
 
   // Lista mockeada de vets
+  // Sincroniza la lista mock para simular futura integración con `services/places`.
   const { data: list = [], loading } = useFocusData(async () => vetsData, []);
 
   // Altura efectiva del header (franja verde + safe-top)
@@ -55,6 +58,7 @@ export default function MapScreen({ navigation }) {
   const dragY = useRef(new Animated.Value(DRAG_MAX)).current; // inicia abajo (cerrado)
   const [sheetOpen, setSheetOpen] = useState(false);
 
+  // Alterna la visibilidad del sheet animado donde se renderiza la lista de veterinarias.
   const toggleSheet = () => {
     const nextOpen = !sheetOpen;
     setSheetOpen(nextOpen);
@@ -67,6 +71,7 @@ export default function MapScreen({ navigation }) {
   };
 
   // Abrir app de mapas nativa con coords
+  // Abre aplicaciones externas trasladando la selección a Apple/Google Maps.
   const openExternalMaps = (vet) => {
     if (!vet?.coords) return;
     const { lat, lng } = vet.coords;
@@ -78,6 +83,7 @@ export default function MapScreen({ navigation }) {
   };
 
 // Marcar clínica como destino "en ruta"
+  // Marca la clínica como ruta activa mostrando un chip en la UI principal.
   const startDirections = () => {
     if (!selectedVet) return;
     setRoutingTo(selectedVet);

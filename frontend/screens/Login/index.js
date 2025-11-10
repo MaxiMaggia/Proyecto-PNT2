@@ -1,12 +1,15 @@
-﻿import React from 'react';
+﻿// Pantalla de login que inicializa el flujo de navegación seguro.
+import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 
+// Gestiona el ingreso y delega la autenticación al contexto global.
 export default function Login({ navigation }) {
   const { login } = useAuth();
+  // Marca sesión activa y redirige al mapa principal.
   const go = () => { login(); navigation.replace('Map'); };
 
   return (

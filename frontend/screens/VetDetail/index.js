@@ -1,8 +1,10 @@
+// Pantalla de detalle que expande la información proveniente de la lista de veterinarias.
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './styles';
 
+// Recibe la clínica seleccionada desde `MapScreen` y prepara navegación adicional.
 export default function VetDetail({ route, navigation }) {
   const { vet } = route.params;
   return (

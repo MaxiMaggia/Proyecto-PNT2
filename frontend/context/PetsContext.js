@@ -1,9 +1,10 @@
-// Estado global de mascotas con persistencia en la API (listar/crear/actualizar/borrar).
+// Estado global de mascotas con persistencia en la API (listar/crear/actualizar/borrar) consumido por varias pantallas.
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import * as api from '../services/pets';
 
 const PetsContext = createContext();
 
+// Agrupa estado y acciones relacionadas a mascotas y las expone al árbol de la app.
 export function PetsProvider({ children }) {
   const [pets, setPets] = useState([]);
   const [hydrated, setHydrated] = useState(false);
@@ -22,7 +23,7 @@ export function PetsProvider({ children }) {
     })();
   }, []);
 
-  // 2) Alta con actualización optimista
+  // 2) Alta con actualización optimista hacia `screens/PetList` y otras vistas que leen el listado.
   const addPet = async (pet) => {
     const tempId = 'tmp-' + Date.now();
     const optimistic = { ...pet, id: tempId };
@@ -37,7 +38,7 @@ export function PetsProvider({ children }) {
     }
   };
 
-  // 3) Update con rollback si falla
+  // 3) Update con rollback si falla para mantener sincronía con `services/pets`.
   const updatePet = async (id, patch) => {
     const snapshot = pets;
     setPets(curr => curr.map(p => p.id === id ? { ...p, ...patch } : p));
@@ -51,7 +52,7 @@ export function PetsProvider({ children }) {
     }
   };
 
-  // 4) Borrado con rollback si falla
+  // 4) Borrado con rollback si falla manteniendo coherencia con la API remota.
   const deletePet = async (id) => {
     const snapshot = pets;
     setPets(curr => curr.filter(p => p.id !== id));
@@ -63,10 +64,12 @@ export function PetsProvider({ children }) {
     }
   };
 
+  // Memoriza valores y acciones para evitar renders extra en componentes consumidores.
   const value = useMemo(() => ({ pets, hydrated, addPet, updatePet, deletePet }), [pets, hydrated]);
   return <PetsContext.Provider value={value}>{children}</PetsContext.Provider>;
 }
 
+// Hook seguro que garantiza que el acceso suceda dentro del provider declarado en `App.js`.
 export const usePets = () => {
   const ctx = useContext(PetsContext);
   if (!ctx) throw new Error('usePets debe usarse dentro de PetsProvider');

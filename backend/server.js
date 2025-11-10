@@ -1,4 +1,4 @@
-// Inicializa Express, middlewares y monta routers de la API.
+// Inicializa Express, middlewares y monta routers de la API (entrypoint del backend).
 import express from 'express';
 import cors from './middleware/cors.js';
 import PetsRouter from './router/pets.js';

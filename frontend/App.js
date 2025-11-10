@@ -1,3 +1,4 @@
+// Entry point configuring providers and navigation stack for the mobile app.
 import 'react-native-gesture-handler';
 import 'react-native-screens';
 import React from 'react';
@@ -15,6 +16,7 @@ import AddPet from './screens/AddPet';
 
 const Stack = createNativeStackNavigator();
 
+// Renders the root component by composing auth/pets providers with the navigation stack.
 export default function App() {
   return (
     <AuthProvider>

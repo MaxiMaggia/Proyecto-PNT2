@@ -1,6 +1,8 @@
+// Definiciones de estilo para el layout del componente Sheet compartido.
 import { StyleSheet, Dimensions } from 'react-native';
 const SHEET_MAX = Math.round(Dimensions.get('window').height * 0.6);
 
+// Hoja de estilos exportada y utilizada exclusivamente por `components/Sheet/index.js`.
 export default StyleSheet.create({
   container: {
     position: 'absolute',

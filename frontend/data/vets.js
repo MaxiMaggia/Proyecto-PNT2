@@ -1,4 +1,4 @@
-// Lista mock de veterinarias para el mapa y el sheet.
+// Lista mock de veterinarias para el mapa y el sheet consumida por Map y VetDetail.
 const vets = [
   { id: 1, name: 'Happy Paws Veterinary', address: '123 Wellness Rd, Petville', distanceKm: 1.2, open: true, rating: 4.6, coords: { lat: -34.6037, lng: -58.3816 } },
   { id: 2, name: 'The Animal Clinic', address: '456 Health Ave, Anytown', distanceKm: 2.5, open: true, rating: 4.4, coords: { lat: -34.6100, lng: -58.3800 } },
@@ -12,5 +12,6 @@ const vets = [
   { id: 10, name: 'All Paws Care', address: '300 Sunset Dr, South', distanceKm: 7.0, open: true, rating: 4.6, coords: { lat: -34.6200, lng: -58.4000 } },
 ];
 
+// Se exporta para alimentar `screens/Map` y `screens/VetDetail` con datos de ejemplo.
 export default vets;
 
