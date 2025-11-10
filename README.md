@@ -16,3 +16,22 @@
 npm run start
 npx expo start --tunnel 
 
+
+Backend (API)
+Terminal 1
+cd backend
+npm i
+# crea tu .env a partir del ejemplo
+cp .env.example .env
+# (opcional) edita .env si querés cambiar PORT o CORS_ORIGIN
+npm run dev
+
+Listar todas las mascotas:
+GET http://192.168.0.3:4000/api/pets
+
+
+Frontend (Expo)
+Terminal 2 – PowerShell en Windows
+cd frontend
+$env:EXPO_PUBLIC_API_URL="http://192.168.0.3:4000"
+npm start
