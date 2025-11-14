@@ -1,3 +1,0 @@
-# Ignora dependencias y credenciales locales.
-node_modules/
-.env
