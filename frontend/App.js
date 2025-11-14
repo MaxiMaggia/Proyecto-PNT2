@@ -1,4 +1,3 @@
-
 import 'react-native-gesture-handler';
 import 'react-native-screens';
 import React from 'react';
@@ -15,7 +14,6 @@ import PetList from './screens/PetList';
 import AddPet from './screens/AddPet';
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (

@@ -1,33 +1,43 @@
-﻿// Pantalla de login que inicializa el flujo de navegación seguro.
-import React from 'react';
+﻿import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
-import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
+import { useAuth } from '../../context/AuthContext';
 
-// Gestiona el ingreso y delega la autenticación al contexto global.
 export default function Login({ navigation }) {
-  const { login } = useAuth();
-  // Marca sesión activa y redirige al mapa principal.
-  const go = () => { login(); navigation.replace('Map'); };
+  const { login, isLogged } = useAuth();
+  const [email, setEmail] = useState('');
+  const [pass, setPass]  = useState('');
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState('');
+
+  const go = async () => {
+    setErr('');
+    try {
+      setLoading(true);
+      await login(email.trim(), pass);
+      navigation.replace('Map');
+    } catch (e) {
+      setErr(e.message || 'No se pudo iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.brand}>PetCare</Text>
 
       <View style={styles.form}>
-        <Text style={styles.label}>Email o Usuario</Text>
-        <Input placeholder="tu@email.com" />
-
+        <Text style={styles.label}>Email</Text>
+        <Input value={email} onChangeText={setEmail} placeholder="tu@email.com" autoCapitalize="none" keyboardType="email-address" />
         <Text style={styles.label}>Contraseña</Text>
-        <Input placeholder={'\u2022\u2022\u2022\u2022\u2022\u2022'} secureTextEntry />
+        <Input value={pass} onChangeText={setPass} placeholder="******" secureTextEntry />
+        {!!err && <Text style={{color:'#fca5a5', marginTop:6}}>{err}</Text>}
       </View>
 
-      <Button title="Iniciar Sesión" onPress={go} style={styles.primary} textStyle={styles.primaryText} />
-
-      <Text style={styles.link} onPress={go}>Crea una cuenta nueva</Text>
+      <Button title={loading ? 'Ingresando…' : 'Iniciar Sesión'} onPress={go} disabled={loading} />
     </View>
   );
 }
-

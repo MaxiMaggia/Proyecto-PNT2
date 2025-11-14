@@ -18,6 +18,7 @@ export default StyleSheet.create({
   backIcon: { fontSize: 18, fontWeight: '700', color: '#ffffff' },
   title: { fontSize: 18, fontWeight: '800', color: '#ffffff' },
 
+  // Uploader
   uploaderWrap: { alignItems: 'center', marginTop: 10, marginBottom: 14 },
   avatarWrap: { position: 'relative' },
   avatar: { width: 120, height: 120, borderRadius: 60, backgroundColor: '#0b1210' },
@@ -30,55 +31,39 @@ export default StyleSheet.create({
   cameraIcon: { fontSize: 18, fontWeight: '800', color: '#102210' },
   uploaderHint: { marginTop: 6, color: '#cbd5e1' },
 
+  // Campos
   field: { marginTop: 10 },
   label: { color: '#e2e8f0', fontWeight: '700', marginBottom: 6 },
-  input: {
-    height: 48,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    backgroundColor: '#f6f8f6',
-    color: '#0f172a'
-  },
 
-  dateBtn: {
-    height: 48,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    backgroundColor: '#f6f8f6',
-    alignItems: 'flex-start',
-    justifyContent: 'center'
-  },
-  dateBtnTxt: { color: '#0f172a', fontWeight: '700' },
-
-  // iOS picker compacto
-  iosPickerCard: {
-    marginTop: 8,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 10
-  },
-  pickerWrap: { alignItems: 'flex-start' },
-  picker: { height: 44, alignSelf: 'stretch' },
-  iosPickerActions: {
-    marginTop: 8,
+  // Toggle Perro/Gato
+  typeRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    gap: 10
+  },
+  typeBtn: {
+    flex: 1,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)'
+  },
+  typeBtnActive: {
+    backgroundColor: '#13ec13',
+    borderColor: '#13ec13'
+  },
+  typeBtnTxt: {
+    fontWeight: '800',
+    color: '#ffffff'
+  },
+  typeBtnTxtActive: {
+    color: '#102210'
   },
 
   // Acciones
   actionsCol: { marginTop: 18, gap: 10 },
-
-  btn: {
-    backgroundColor: '#13ec13',
-    height: 48,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 18
-  },
-  btnTxt: { color: '#102210', fontWeight: '800' },
 
   btnGhost: {
     height: 48,
@@ -99,33 +84,5 @@ export default StyleSheet.create({
     paddingHorizontal: 18,
     backgroundColor: '#ef4444'
   },
-  btnDangerTxt: { color: '#ffffff', fontWeight: '800' },
-
-  // --- Chips de tipo ---
-  chipRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  chip: {
-    height: 40,
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.10)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.18)',
-  },
-  chipActive: {
-    backgroundColor: '#13ec13',
-    borderColor: '#13ec13',
-  },
-  chipText: {
-    color: '#e2e8f0',
-    fontWeight: '800',
-  },
-  chipTextActive: {
-    color: '#102210',
-    fontWeight: '800',
-  },
+  btnDangerTxt: { color: '#ffffff', fontWeight: '800' }
 });
