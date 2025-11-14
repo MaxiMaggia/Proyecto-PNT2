@@ -109,7 +109,7 @@ export default function AddPet({ navigation, route }) {
       navigation.navigate('PetList');
     } catch (e) {
       console.error('Error guardando mascota:', e);
-      alert('No se pudo guardar. ¿Backend accesible?\n' + (e?.message || ''));
+      alert('No esta el backend crack\n' + (e?.message || ''));
     }
   };
 
