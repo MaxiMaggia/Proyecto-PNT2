@@ -23,6 +23,8 @@ import styles, { DRAG_MAX } from './styles';
 import useFocusData from '../../hooks/useFocusData';
 import vetsData from '../../data/vets';
 import AppBar from '../../components/AppBar';
+import { useAuth } from '../../context/AuthContext';
+
 
 function Stars({ rating = 0 }) {
   const full = Math.floor(rating);
@@ -38,6 +40,7 @@ function Stars({ rating = 0 }) {
 }
 
 export default function MapScreen({ navigation }) {
+  const { logout } = useAuth();
   const insets = useSafeAreaInsets();
 
   // UI local
@@ -97,11 +100,11 @@ export default function MapScreen({ navigation }) {
 
       <View style={[styles.appBarBg, { height: headerHeight }]} />
       <View style={[styles.appBarWrap, { paddingTop: insets.top + 8 }]}>
-        <AppBar
+      <AppBar
           title="Find Vets"
           scheme="dark"
           onLeftPress={() => navigation.navigate('PetList')}
-          onRightPress={() => setFiltersOpen(true)}
+          onRightPress={logout}
         />
       </View>
       {/* Chip “En ruta a …” */}
