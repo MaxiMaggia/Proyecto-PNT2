@@ -1,5 +1,5 @@
 // screens/AddPet/index.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,10 @@ import styles from './styles';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { usePets } from '../../context/PetsContext';
+import { Picker } from '@react-native-picker/picker';
+import { buildUrl, endpoints } from '../../config/api';
+import axios from 'axios';
+
 
 export default function AddPet({ navigation, route }) {
   const insets = useSafeAreaInsets();
@@ -23,8 +27,11 @@ export default function AddPet({ navigation, route }) {
   const isEdit = !!pet;
 
   const [name, setName] = useState(pet?.nombre || pet?.name || '');
-  const [type, setType] = useState(pet?.tipo || pet?.type || 'Perro'); 
+  const [type, setType] = useState(pet?.tipo || pet?.type || ''); 
   const [breed, setBreed] = useState(pet?.raza || pet?.breed || '');
+  const [breeds, setBreeds] = useState([]);
+  const [loadingBreeds, setLoadingBreeds] = useState(false);
+  const [showBreedModal, setShowBreedModal] = useState(false);
   const [age, setAge] = useState(
     pet?.edad !== undefined && pet?.edad !== null ? String(pet.edad) : ''
   );
@@ -33,6 +40,69 @@ export default function AddPet({ navigation, route }) {
       ? String(pet.cantidadVacunas)
       : ''
   );
+  const [showModal, setShowModal] = useState(false);
+  const [types, setTypes] = useState([]);
+  const [loadingTypes, setLoadingTypes] = useState(true);
+  const [selectedBreed, setSelectedBreed] = useState(null);
+
+
+  // Carga los tipos de animales
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+
+        const url = "http://192.168.0.15:3000/api/animals";  
+        const res = await axios.get(url);
+        setTypes(res.data); 
+      } catch (err) {
+        console.log("Error cargando tipos:", err);
+      } finally {
+        setLoadingTypes(false);
+      }
+    };
+  
+    fetchTypes();
+  }, []);
+
+  // Carga las razas de los animales
+  useEffect(() => {
+    const fetchBreeds = async () => {
+      try {
+        setLoadingBreeds(true);
+  
+        const urlTipos = "http://192.168.0.15:3000/api/animals";
+        const tiposRes = await axios.get(urlTipos);
+  
+        const typeNormalized = type.trim().toLowerCase();
+  
+        const tipoEncontrado = tiposRes.data.find(
+          t => t.type.trim().toLowerCase() === typeNormalized
+        );
+  
+        if (!tipoEncontrado) {
+          console.log(":", type);
+          setBreeds([]);
+          return;
+        }
+  
+        const urlRaza = "http://192.168.0.15:3000/api/raza";
+        const razasRes = await axios.get(urlRaza, {
+          params: { typeId: tipoEncontrado.id }
+        });
+  
+        setBreeds(razasRes.data);
+  
+      } catch (err) {
+        console.log("Error cargando razas:", err);
+      } finally {
+        setLoadingBreeds(false);
+      }
+    };
+  
+    fetchBreeds();
+  }, [type]);
+  
+  
 
   const goBack = () => navigation.goBack();
 
@@ -144,32 +214,82 @@ export default function AddPet({ navigation, route }) {
             />
           </View>
 
-          {/* Tipo: botones Perro / Gato */}
+          {/* Tipo de animal */}
           <View style={styles.field}>
             <Text style={styles.label}>Tipo de animal</Text>
-            <View style={styles.typeRow}>
-              {renderTypeButton('Perro', 'Perro')}
-              {renderTypeButton('Gato', 'Gato')}
-            </View>
+              <Pressable onPress={() => setShowModal(true)} style={styles.selectBox}>
+                <Text style={styles.selectText}>
+                  {type || "Selecciona un tipo"}
+                </Text>
+              </Pressable>
           </View>
-
+        {showModal && (
+          <Pressable style={styles.modalOverlay} onPress={() => setShowModal(false)}>
+            <View style={styles.modalBox}>
+              {types.map(t => (
+                <Pressable
+                  key={t.id}
+                  style={styles.modalOption}
+                  onPress={() => {
+                    setType(t.type);
+                    setShowModal(false);
+                  }}
+                >
+                  <Text style={styles.modalOptionText}>{t.type}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </Pressable>
+        )}
+  
           {/* Raza */}
           <View style={styles.field}>
-            <Text style={styles.label}>Raza</Text>
-            <Input
-              value={breed}
-              onChangeText={setBreed}
-              placeholder="Ej: Caniche, Siamés…"
-            />
-          </View>
+          <Text style={styles.label}>Raza</Text>
 
-          {/* Edad */}
+          <Pressable onPress={() => setShowBreedModal(true)} style={styles.selectBox}>
+            <Text style={styles.selectText}>
+              {breed || "Selecciona una raza"}
+            </Text>
+          </Pressable>
+
+          {showBreedModal && (
+            <Pressable
+              style={styles.modalOverlay}
+              onPress={() => setShowBreedModal(false)}
+            >
+              <View style={styles.modalBox}>
+
+                {loadingBreeds && (
+                  <Text style={styles.selectText}>Cargando razas...</Text>
+                )}
+
+                {!loadingBreeds &&
+                  breeds.map(b => (
+                    <Pressable
+                      key={b.id}
+                      style={styles.modalOption}
+                      onPress={() => {
+                        setBreed(b.name);
+                        setShowBreedModal(false);
+                      }}
+                    >
+                      <Text style={styles.modalOptionText}>{b.name}</Text>
+                    </Pressable>
+                  ))
+                }
+
+              </View>
+            </Pressable>
+          )}
+        </View> 
+          {/* Edad (opcional) */}
           <View style={styles.field}>
-            <Text style={styles.label}>Edad (en años)</Text>
+            <Text style={styles.label}>Edad (opcional)</Text>
             <Input
+              style={{ marginTop: 8 }}
               value={age}
               onChangeText={setAge}
-              placeholder="Ej: 2"
+              placeholder="Ej: 5"
               keyboardType="numeric"
             />
           </View>
@@ -178,6 +298,7 @@ export default function AddPet({ navigation, route }) {
           <View style={styles.field}>
             <Text style={styles.label}>Cantidad de vacunas (opcional)</Text>
             <Input
+              style={{ marginTop: 8 }}
               value={vaccines}
               onChangeText={setVaccines}
               placeholder="Ej: 3"

@@ -3,6 +3,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { buildUrl, endpoints } from '../config/api';
 import useHydrateAuth from '../hooks/useHydrateAuth';
+import { jwtDecode } from 'jwt-decode';
 
 const LOGIN_URL = buildUrl(endpoints.auth.login);
 
@@ -29,19 +30,18 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     try {
       const res = await axios.post(LOGIN_URL, { email, password });
-      const newToken = res.data?.token;
-      const usuario = res.data?.usuario;
+      const token = res.data?.token;
 
-      if (!newToken || !usuario?._id) {
-        throw new Error('Respuesta inválida del servidor');
-      }
+      if (!token) throw new Error("Token faltante");
+      const payload = jwtDecode(token);
+      const userId = payload.userId;
 
-      setToken(newToken);
-      setUserId(usuario._id);
+      setToken(token);
+      setUserId(userId);
       setIsLogged(true);
 
-      await AsyncStorage.setItem(STORAGE_TOKEN_KEY, newToken);
-      await AsyncStorage.setItem(STORAGE_USERID_KEY, String(usuario._id));
+      await AsyncStorage.setItem(STORAGE_TOKEN_KEY, token);
+      await AsyncStorage.setItem(STORAGE_USERID_KEY, String(userId));
     } catch (err) {
       console.error('Error en login', err?.response?.data || err.message);
       throw err;
@@ -63,6 +63,21 @@ export function AuthProvider({ children }) {
     () => ({ isLogged, token, userId, login, logout }),
     [isLogged, token, userId]
   );
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response?.status === 401) {
+          console.log("Token expirado → logout()");
+          logout();        
+        }
+        return Promise.reject(error);
+      }
+    );
+  
+    return () => axios.interceptors.response.eject(interceptor);
+  }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
