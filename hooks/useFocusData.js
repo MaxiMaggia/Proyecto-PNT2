@@ -1,4 +1,3 @@
-// Carga datos cada vez que la screen gana foco
 import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -24,7 +23,6 @@ export default function useFocusData(loader, deps = []) {
       return () => {
         active = false;
       };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, deps)
   );
 

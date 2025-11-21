@@ -1,9 +1,4 @@
-// Pantalla de Mapa (maqueta):
-// - Muestra imagen de mapa de fondo.
-// - AppBar con botón izquierdo (va a Mis Mascotas) y derecho (abre filtros).
-// - Bottom Sheet deslizable (lista de veterinarias mockeadas).
-// - Panel de detalle rápido + acciones (“Indicaciones” interno o abrir Maps externo).
-// - TODO futuro: reemplazar mocks por services/location + services/places.
+
 
 import React, { useMemo, useRef, useState } from 'react';
 import {
@@ -16,6 +11,7 @@ import {
   Linking,
   Platform,
   Animated,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -55,7 +51,7 @@ export default function MapScreen({ navigation }) {
   const headerHeight = useMemo(() => insets.top + 64 + 8, [insets.top]);
 
   // ===== Bottom Sheet
-  const dragY = useRef(new Animated.Value(DRAG_MAX)).current; // inicia abajo (cerrado)
+  const dragY = useRef(new Animated.Value(DRAG_MAX)).current; 
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const toggleSheet = () => {
@@ -104,7 +100,16 @@ export default function MapScreen({ navigation }) {
           title="Find Vets"
           scheme="dark"
           onLeftPress={() => navigation.navigate('PetList')}
-          onRightPress={logout}
+          onRightPress={() =>
+            Alert.alert(
+              'Cerrar sesión',
+              '¿Querés cerrar tu sesión y volver al inicio?',
+              [
+                { text: 'Cancelar', style: 'cancel' },
+                { text: 'Sí, cerrar sesión', style: 'destructive', onPress: logout },
+              ],
+            )
+          }
         />
       </View>
       {/* Chip “En ruta a …” */}

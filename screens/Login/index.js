@@ -14,11 +14,13 @@ export default function Login({ navigation }) {
   const [errorMsg, setErrorMsg] = useState('');
 
   const go = async () => {
+    setErrorMsg('');
     try {
       await login(email, password);
-      navigation.replace('Map');
     } catch (err) {
-      setErrorMsg(err.message);
+      const msg =
+        err?.response?.data?.message || 'Email o contraseña incorrectos';
+      setErrorMsg(msg);
     }
   };
 

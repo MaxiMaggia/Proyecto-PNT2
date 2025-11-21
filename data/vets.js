@@ -1,4 +1,3 @@
-// data/vets.js
 const vets = [
     { id: 1, name: 'Happy Paws Veterinary', address: '123 Wellness Rd, Petville', distanceKm: 1.2, open: true, rating: 4.6, coords: { lat: -34.6037, lng: -58.3816 } },
     { id: 2, name: 'The Animal Clinic', address: '456 Health Ave, Anytown', distanceKm: 2.5, open: true, rating: 4.4, coords: { lat: -34.6100, lng: -58.3800 } },

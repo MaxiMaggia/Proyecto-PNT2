@@ -1,122 +1,204 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { View, Text, Pressable, Platform, KeyboardAvoidingView, ScrollView, Image } from 'react-native';
+// screens/AddPet/index.js
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Pressable,
+  Image,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from './styles';
-import { usePets } from '../../context/PetsContext';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-import { parseISOtoDate, formatDateDDMMYYYY } from '../../utils/date';
+import { usePets } from '../../context/PetsContext';
 
 export default function AddPet({ navigation, route }) {
   const insets = useSafeAreaInsets();
-  const { addPet, updatePet, deletePet } = usePets();
+  const { addPet, editPet, removePet } = usePets();
 
-  const pet = route?.params?.pet || null;
+  const pet = route?.params?.pet;
   const isEdit = !!pet;
 
-  const initialDate = useMemo(
-    () => parseISOtoDate(pet?.birthDate) || new Date(2020, 4, 15),
-    [pet]
+  const [name, setName] = useState(pet?.nombre || pet?.name || '');
+  const [type, setType] = useState(pet?.tipo || pet?.type || 'Perro'); 
+  const [breed, setBreed] = useState(pet?.raza || pet?.breed || '');
+  const [age, setAge] = useState(
+    pet?.edad !== undefined && pet?.edad !== null ? String(pet.edad) : ''
   );
-
-  const [name, setName] = useState(pet?.name || '');
-  const [type, setType] = useState(pet?.type || 'Perro');
-  const [breed, setBreed] = useState(pet?.breed || '');
-  const [birthDate, setBirthDate] = useState(initialDate);
-  const [showPicker, setShowPicker] = useState(false);
-
-  useEffect(() => {
-    if (isEdit) {
-      setName(pet?.name || '');
-      setType(pet?.type || 'Perro');
-      setBreed(pet?.breed || '');
-      setBirthDate(parseISOtoDate(pet?.birthDate) || new Date(2020, 4, 15));
-    }
-  }, [isEdit, pet]);
+  const [vaccines, setVaccines] = useState(
+    pet?.cantidadVacunas !== undefined && pet?.cantidadVacunas !== null
+      ? String(pet.cantidadVacunas)
+      : ''
+  );
 
   const goBack = () => navigation.goBack();
 
-  const onChangeDate = (_ev, selected) => {
-    if (Platform.OS === 'android') setShowPicker(false);
-    if (selected) setBirthDate(selected);
-  };
+  const handleSave = async () => {
+    const edadNum =
+      age === '' || Number.isNaN(Number(age)) ? null : Number(age);
 
-  const handleSave = () => {
-    const payload = {
-      name: name.trim() || 'Mi mascota',
-      type: type.trim() || 'Perro',
-      breed: breed.trim(),
-      birthDate: birthDate?.toISOString(),
+    const vacNum =
+      vaccines === '' || Number.isNaN(Number(vaccines))
+        ? 0
+        : Number(vaccines);
+
+    const formData = {
+      nombre: name.trim(),
+      tipo: type.trim(),
+      raza: breed.trim(),
+      edad: edadNum,
+      cantidadVacunas: vacNum,
+      foto: pet?.foto ?? null,
     };
-    if (isEdit) updatePet(pet.id, payload);
-    else addPet({ id: Date.now(), ...payload });
-    navigation.navigate('PetList');
+
+    try {
+      if (isEdit && (pet._id || pet.id)) {
+        await editPet(pet._id || pet.id, formData);
+      } else {
+        await addPet(formData);
+      }
+      navigation.goBack();
+    } catch (err) {
+      console.log('Error en handleSave', err);
+    }
   };
 
-  const handleDelete = () => {
-    if (!isEdit) return;
-    deletePet(pet.id);
-    navigation.navigate('PetList');
+  const handleDelete = async () => {
+    if (!isEdit || !pet) return;
+    try {
+      await removePet(pet._id || pet.id);
+      navigation.goBack();
+    } catch (err) {
+      console.log('Error borrando mascota', err);
+    }
+  };
+
+  const renderTypeButton = (value, label) => {
+    const active = type === value;
+    return (
+      <Pressable
+        onPress={() => setType(value)}
+        style={[
+          styles.typeBtn,
+          active && styles.typeBtnActive,
+        ]}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      >
+        <Text
+          style={[
+            styles.typeBtnText,
+            active && styles.typeBtnTextActive,
+          ]}
+        >
+          {label}
+        </Text>
+      </Pressable>
+    );
   };
 
   return (
     <SafeAreaView style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        {/* HEADER */}
         <View style={styles.header}>
-          <Pressable onPress={goBack} style={styles.backBtn}><Text style={styles.backIcon}>←</Text></Pressable>
-          <Text style={styles.title}>{isEdit ? 'Editar Mascota' : 'Añadir Mascota'}</Text>
+          <Pressable onPress={goBack} style={styles.backBtn}>
+            <Text style={styles.backIcon}>←</Text>
+          </Pressable>
+          <Text style={styles.title}>
+            {isEdit ? 'Editar Mascota' : 'Añadir Mascota'}
+          </Text>
           <View style={{ width: 44 }} />
         </View>
 
+        {/* CONTENIDO */}
         <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}>
-          {/* avatar mock + botón de cámara no funcional todavia */}
+          {/* Avatar mock + botón cámara (todavía no funcional) */}
           <View style={styles.uploaderWrap}>
             <View style={styles.avatarWrap}>
-              <Image source={require('../../assets/avatar-placeholder.png')} style={styles.avatar} />
-              <Pressable style={styles.cameraBtn}><Text style={styles.cameraIcon}>📷</Text></Pressable>
+              <Image
+                source={require('../../assets/avatar-placeholder.png')}
+                style={styles.avatar}
+              />
+              <Pressable style={styles.cameraBtn}>
+                <Text style={styles.cameraIcon}>📷</Text>
+              </Pressable>
             </View>
-            <Text style={styles.uploaderHint}>Foto opcional (no funcional por ahora)</Text>
+            <Text style={styles.uploaderHint}>
+              Foto opcional (por ahora solo decorativo)
+            </Text>
           </View>
 
-          <View style={styles.field}><Text style={styles.label}>Nombre</Text>
-            <Input value={name} onChangeText={setName} placeholder="Introduce el nombre" />
+          {/* Nombre */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Nombre</Text>
+            <Input
+              value={name}
+              onChangeText={setName}
+              placeholder="Introduce el nombre"
+            />
           </View>
 
-          <View style={styles.field}><Text style={styles.label}>Tipo de animal</Text>
-            <Input value={type} onChangeText={setType} placeholder="Perro / Gato" />
+          {/* Tipo: botones Perro / Gato */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Tipo de animal</Text>
+            <View style={styles.typeRow}>
+              {renderTypeButton('Perro', 'Perro')}
+              {renderTypeButton('Gato', 'Gato')}
+            </View>
           </View>
 
-          <View style={styles.field}><Text style={styles.label}>Raza</Text>
-            <Input value={breed} onChangeText={setBreed} placeholder="Empieza a escribir…" />
+          {/* Raza */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Raza</Text>
+            <Input
+              value={breed}
+              onChangeText={setBreed}
+              placeholder="Ej: Caniche, Siamés…"
+            />
           </View>
 
-          <View style={styles.field}><Text style={styles.label}>Fecha de nacimiento</Text>
-            <Pressable style={styles.dateBtn} onPress={() => setShowPicker(true)}>
-              <Text style={styles.dateBtnTxt}>{formatDateDDMMYYYY(birthDate)}</Text>
-            </Pressable>
-
-            {showPicker && Platform.OS === 'android' && (
-              <DateTimePicker value={birthDate} mode="date" display="calendar" onChange={onChangeDate} maximumDate={new Date()} />
-            )}
-
-            {showPicker && Platform.OS === 'ios' && (
-              <View style={styles.iosPickerCard}>
-                <DateTimePicker value={birthDate} mode="date" display="compact" onChange={onChangeDate} maximumDate={new Date()} />
-                <View style={styles.iosPickerActions}>
-                  <Pressable style={styles.btnGhost} onPress={() => setShowPicker(false)}><Text style={styles.btnGhostTxt}>Cancelar</Text></Pressable>
-                  <Button title="Listo" onPress={() => setShowPicker(false)} />
-                </View>
-              </View>
-            )}
+          {/* Edad */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Edad (en años)</Text>
+            <Input
+              value={age}
+              onChangeText={setAge}
+              placeholder="Ej: 2"
+              keyboardType="numeric"
+            />
           </View>
 
-          <View style={styles.actionsCol}>
-            <Button title={isEdit ? 'Guardar Cambios' : 'Guardar Mascota'} onPress={handleSave} />
-            {isEdit ? (
-              <Pressable style={styles.btnDanger} onPress={handleDelete}><Text style={styles.btnDangerTxt}>Borrar Mascota</Text></Pressable>
-            ) : (
-              <Pressable style={styles.btnGhost} onPress={goBack}><Text style={styles.btnGhostTxt}>Cancelar</Text></Pressable>
+          {/* Cantidad de vacunas (opcional) */}
+          <View style={styles.field}>
+            <Text style={styles.label}>Cantidad de vacunas (opcional)</Text>
+            <Input
+              value={vaccines}
+              onChangeText={setVaccines}
+              placeholder="Ej: 3"
+              keyboardType="numeric"
+            />
+          </View>
+
+          {/* Botones guardar / borrar */}
+          <View style={{ marginTop: 24, gap: 12 }}>
+            <Button
+              title={isEdit ? 'Guardar cambios' : 'Guardar mascota'}
+              onPress={handleSave}
+            />
+
+            {isEdit && (
+              <Button
+                title="Borrar mascota"
+                onPress={handleDelete}
+                style={{ backgroundColor: '#fee2e2' }}
+                textStyle={{ color: '#b91c1c' }}
+              />
             )}
           </View>
         </ScrollView>

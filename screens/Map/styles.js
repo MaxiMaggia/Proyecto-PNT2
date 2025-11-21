@@ -4,9 +4,9 @@ const SHEET_MAX = Math.round(Dimensions.get('window').height * 0.6);
 export const DRAG_MAX = 240;
 
 // Paleta
-const BG_DARK = '#102210';                 // fondo general
-const GREEN_APPBAR = 'rgba(16,34,16,0.97)';// franja del título (verde oscuro)
-const GREEN_SHEET = '#133A13';             // fondo del bottom sheet
+const BG_DARK = '#102210';                 
+const GREEN_APPBAR = 'rgba(16,34,16,0.97)';
+const GREEN_SHEET = '#133A13';             
 const TEXT_PRIMARY = '#F1FAF1';
 const TEXT_SECONDARY = '#CFE8CF';
 
@@ -16,12 +16,11 @@ export default StyleSheet.create({
   // mapa único
   mapBg: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 },
 
-  // Header verde detrás del AppBar (RECTO: sin bordes redondeados)
+  // Header verde detrás del AppBar 
   appBarBg: {
     position: 'absolute',
     top: 0, left: 0, right: 0,
     backgroundColor: GREEN_APPBAR,
-    // ❌ quitamos bordes redondeados
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     shadowColor: '#000',
@@ -58,7 +57,7 @@ export default StyleSheet.create({
   },
   routeChipCloseTxt: { fontSize: 12, fontWeight: '800', color: '#0f172a' },
 
-  // Bottom sheet (verde)
+  // Bottom sheet 
   sheet: {
     position: 'absolute',
     left: 0, right: 0, bottom: 0,
@@ -79,13 +78,13 @@ export default StyleSheet.create({
   // Tarjetas dentro del sheet (BLANCAS con texto negro)
   card: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#ffffff',            // ← blanco
+    backgroundColor: '#ffffff',            
     borderRadius: 12,
     paddingVertical: 10, paddingHorizontal: 12,
     marginBottom: 10
   },
-  cardTitle: { fontSize: 16, fontWeight: '800', color: '#0f172a' },  // texto oscuro
-  cardSub: { color: '#475569' },                                      // gris oscuro legible
+  cardTitle: { fontSize: 16, fontWeight: '800', color: '#0f172a' }, 
+  cardSub: { color: '#475569' },                                      
 
   badgeBase: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginLeft: 8 },
   badgeOpen:  { backgroundColor: 'rgba(20, 180, 120, 0.18)' },

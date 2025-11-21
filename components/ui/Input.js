@@ -1,4 +1,3 @@
-// Input base para unificar paddings/colores.
 import React from 'react';
 import { TextInput } from 'react-native';
 

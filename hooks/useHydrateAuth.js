@@ -1,23 +1,29 @@
-// Boot de sesión. 
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function useHydrateAuth(setIsLogged, setToken) {
+const STORAGE_TOKEN_KEY = 'auth_token';
+const STORAGE_USERID_KEY = 'auth_user_id';
+
+export default function useHydrateAuth(setIsLogged, setToken, setUserId) {
   useEffect(() => {
-    async function hydrate() {
+    const hydrate = async () => {
       try {
-        const storedToken = await AsyncStorage.getItem("auth_token");
+        const storedToken = await AsyncStorage.getItem(STORAGE_TOKEN_KEY);
+        const storedUserId = await AsyncStorage.getItem(STORAGE_USERID_KEY);
 
         if (storedToken) {
           setToken(storedToken);
           setIsLogged(true);
         }
 
-      } catch (err) {
-        console.log("Error al hidratar sesión:", err);
+        if (storedUserId) {
+          setUserId(storedUserId);
+        }
+      } catch (e) {
+        console.log('Error hidratando auth', e);
       }
-    }
+    };
 
     hydrate();
-  }, []);
+  }, [setIsLogged, setToken, setUserId]);
 }

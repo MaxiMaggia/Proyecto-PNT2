@@ -99,5 +99,35 @@ export default StyleSheet.create({
     paddingHorizontal: 18,
     backgroundColor: '#ef4444'
   },
-  btnDangerTxt: { color: '#ffffff', fontWeight: '800' }
+  btnDangerTxt: { color: '#ffffff', fontWeight: '800' },
+
+  typeRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  typeBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: '#cbd5f5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f8fafc',
+  },
+  typeBtnActive: {
+    backgroundColor: '#2563eb',
+    borderColor: '#2563eb',
+  },
+  typeBtnText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#1f2937',
+  },
+  typeBtnTextActive: {
+    color: '#ffffff',
+  },
+
 });
+

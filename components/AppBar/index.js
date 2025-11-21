@@ -6,7 +6,7 @@ export default function AppBar({
   title = '',
   onLeftPress,
   onRightPress,
-  scheme = 'dark', // 'dark' texto blanco, 'light' texto oscuro
+  scheme = 'dark', 
 }) {
   const titleStyle = scheme === 'dark' ? styles.titleDark : styles.titleLight;
 
@@ -31,11 +31,10 @@ export default function AppBar({
         onPress={onRightPress}
         style={styles.circleBtn}
         hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        accessibilityLabel="Parámetros de búsqueda"
+        accessibilityLabel="Cerrar sesión"
         accessibilityRole="button"
       >
-
-        <Text style={styles.iconGreen}>⚙</Text>
+        <Text style={styles.iconGreen}>⏻</Text>
       </Pressable>
     </View>
   );

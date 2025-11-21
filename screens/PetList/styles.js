@@ -1,14 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-  // 👇 volvemos al verde oscuro
   container: { flex: 1, backgroundColor: '#102210' },
 
   header: {
     height: 64, paddingHorizontal: 12,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
   },
-  // 👇 textos del header en blanco para contrastar
   backBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
   backIcon: { fontSize: 20, fontWeight: '700', color: '#ffffff' },
   title: { fontSize: 18, fontWeight: '800', color: '#ffffff' },
@@ -17,7 +15,6 @@ export default StyleSheet.create({
   emptyIcon: { fontSize: 48, opacity: 0.8, color: '#ffffff' },
   emptyTitle: { marginTop: 8, fontSize: 16, fontWeight: '700', color: '#ffffff' },
 
-  // Las tarjetas siguen blancas para legibilidad sobre el fondo verde
   item: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: '#fff', marginHorizontal: 12, marginTop: 10,
@@ -28,7 +25,6 @@ export default StyleSheet.create({
   petSub: { color: '#667' },
   chev: { fontSize: 26, paddingHorizontal: 6, color: '#334155' },
 
-  // FAB con más aire (como te dejé) y verde consistente
   fab: {
     position: 'absolute',
     bottom: 28,

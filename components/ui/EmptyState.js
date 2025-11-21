@@ -1,4 +1,3 @@
-// Estado vacío reutilizable (se usa en PetList).
 import React from 'react';
 import { View, Text } from 'react-native';
 

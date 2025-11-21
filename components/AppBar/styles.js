@@ -36,6 +36,6 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: '800',
   },
-  titleDark: { color: '#ffffff' },    // sobre header verde
-  titleLight: { color: '#0f172a' },   // sobre header claro
+  titleDark: { color: '#ffffff' },    
+  titleLight: { color: '#0f172a' },  
 });
