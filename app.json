@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "apiUrl": "http://192.168.0.15:3000"
+    },
     "ios": { "supportsTablet": true },
     "android": {
       "adaptiveIcon": {
