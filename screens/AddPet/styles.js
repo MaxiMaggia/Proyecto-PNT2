@@ -128,6 +128,61 @@ export default StyleSheet.create({
   typeBtnTextActive: {
     color: '#ffffff',
   },
+  // Select estilo input
+selectBox: {
+  height: 48,
+  borderRadius: 12,
+  paddingHorizontal: 12,
+  justifyContent: 'center',
+  backgroundColor: '#f6f8f6',
+  marginTop: 8,
+},
 
+selectText: {
+  color: '#0f172a',
+  fontSize: 16,
+  fontWeight: '400',
+},
+
+// Modal
+modalOverlay: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0,0,0,0.45)',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  zIndex: 99999,
+  elevation: 99999,  
+},
+
+modalBox: {
+  width: '80%',
+  backgroundColor: '#ffffff',
+  borderRadius: 12,
+  paddingVertical: 10,
+
+  // sombras opcionales
+  elevation: 8,
+  shadowColor: '#000',
+  shadowOpacity: 0.25,
+  shadowRadius: 8,
+
+  zIndex: 100000,
+},
+
+
+modalOption: {
+  paddingVertical: 14,
+  paddingHorizontal: 18,
+},
+
+modalOptionText: {
+  fontSize: 16,
+  color: '#0f172a',
+},
 });
 

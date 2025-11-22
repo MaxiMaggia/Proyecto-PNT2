@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { buildUrl, endpoints } from '../config/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
 
+const API_URL = Constants.expoConfig.extra.apiUrl;
 
 export async function fetchPetsByUsuarioId(usuarioId) {
   const url = buildUrl(endpoints.mascotas.getByUsuario(usuarioId));
@@ -10,9 +13,23 @@ export async function fetchPetsByUsuarioId(usuarioId) {
 }
 
 export async function createPet(payload) {
+  if (!API_URL) {
+    throw new Error("API_URL no está definida en expo-config");
+  }
 
-  const url = buildUrl(endpoints.mascotas.create);
-  const res = await axios.post(url, payload);
+  const url = `${API_URL}/api/mascotas`;
+
+  console.log("URL final createPet:", url);
+
+  const token = await AsyncStorage.getItem("auth_token");
+
+  const res = await axios.post(url, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
   return res.data;
 }
 
