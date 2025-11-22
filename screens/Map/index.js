@@ -20,6 +20,7 @@ import useFocusData from '../../hooks/useFocusData';
 import vetsData from '../../data/vets';
 import AppBar from '../../components/AppBar';
 import { useAuth } from '../../context/AuthContext';
+import MapViewBase from './MapViewBase';
 
 
 function Stars({ rating = 0 }) {
@@ -86,32 +87,8 @@ export default function MapScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Mapa (placeholder) */}
-      <ExpoImage
-        source={require('../../assets/map-placeholder.jpg')}
-        style={styles.mapBg}
-        contentFit="cover"
-        cachePolicy="memory-disk"
-        transition={200}
-      />
+      <MapViewBase vets={list} onSelectVet={setSelectedVet} />
 
-      <View style={[styles.appBarBg, { height: headerHeight }]} />
-      <View style={[styles.appBarWrap, { paddingTop: insets.top + 8 }]}>
-      <AppBar
-          title="Find Vets"
-          scheme="dark"
-          onLeftPress={() => navigation.navigate('PetList')}
-          onRightPress={() =>
-            Alert.alert(
-              'Cerrar sesión',
-              '¿Querés cerrar tu sesión y volver al inicio?',
-              [
-                { text: 'Cancelar', style: 'cancel' },
-                { text: 'Sí, cerrar sesión', style: 'destructive', onPress: logout },
-              ],
-            )
-          }
-        />
-      </View>
       {/* Chip “En ruta a …” */}
       {routingTo && (
         <View style={[styles.routeChip, { top: headerHeight + 8 }]}>

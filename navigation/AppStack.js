@@ -5,15 +5,44 @@ import MapScreen from '../screens/Map';
 import VetDetail from '../screens/VetDetail';
 import PetList from '../screens/PetList';
 import AddPet from '../screens/AddPet';
+import Home from '../screens/Home';
+import AppBar from '../components/AppBar';
+import { useAuth } from '../context/AuthContext';
+import useLogoutAlert from '../hooks/useLogoutAlert';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppStack() {
+  const showLogoutAlert = useLogoutAlert();
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Map" component={MapScreen} />
+    <Stack.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        header: ({ route }) => (
+          <AppBar title={route.name} scheme="dark" />
+        ),
+      }}
+    >
+      <Stack.Screen 
+        name="Home" 
+        component={Home}
+        options={{
+          header: () => <AppBar title="Inicio" showBackButton={false} />
+        }}
+      />
+      <Stack.Screen 
+        name="Map" 
+        component={MapScreen} 
+        options={{
+          header: () => <AppBar title="Mapa" showBackButton={true} showLogoutButton={false} />
+        }}
+      />
       <Stack.Screen name="VetDetail" component={VetDetail} />
-      <Stack.Screen name="PetList" component={PetList} />
+      <Stack.Screen name="PetList" component={PetList} options={{
+        header: () => <AppBar title="Mis mascotas" showBackButton={true} showLogoutButton={false} />
+      }} />
       <Stack.Screen name="AddPet" component={AddPet} />
     </Stack.Navigator>
   );

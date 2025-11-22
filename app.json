@@ -11,6 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [],
     "extra": {
       "apiUrl": "http://192.168.0.15:3000"
     },

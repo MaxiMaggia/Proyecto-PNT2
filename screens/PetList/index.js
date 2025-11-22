@@ -24,9 +24,6 @@ export default function PetList({ navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
-        <Pressable onPress={goBack} style={styles.backBtn}>
-          <Text style={styles.backIcon}>←</Text>
-        </Pressable>
         <Text style={styles.title}>Mis mascotas</Text>
         <View style={{ width: 44 }} />
       </View>

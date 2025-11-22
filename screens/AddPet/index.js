@@ -177,9 +177,6 @@ export default function AddPet({ navigation, route }) {
       >
         {/* HEADER */}
         <View style={styles.header}>
-          <Pressable onPress={goBack} style={styles.backBtn}>
-            <Text style={styles.backIcon}>←</Text>
-          </Pressable>
           <Text style={styles.title}>
             {isEdit ? 'Editar Mascota' : 'Añadir Mascota'}
           </Text>
