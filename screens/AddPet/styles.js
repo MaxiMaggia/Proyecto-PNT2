@@ -18,7 +18,7 @@ export default StyleSheet.create({
   backIcon: { fontSize: 18, fontWeight: '700', color: '#ffffff' },
   title: { fontSize: 18, fontWeight: '800', color: '#ffffff' },
 
-  uploaderWrap: { alignItems: 'center', marginTop: 10, marginBottom: 14 },
+  uploaderWrap: { alignItems: 'center', marginTop: 8, marginBottom: 14 },
   avatarWrap: { position: 'relative' },
   avatar: { width: 120, height: 120, borderRadius: 60, backgroundColor: '#0b1210' },
   cameraBtn: {

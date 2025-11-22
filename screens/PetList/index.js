@@ -23,11 +23,7 @@ export default function PetList({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Mis mascotas</Text>
-        <View style={{ width: 44 }} />
-      </View>
-
+    
       {loading ? (
         <View style={styles.empty}>
           <Text style={styles.emptyTitle}>Cargando mascotas…</Text>
@@ -42,7 +38,11 @@ export default function PetList({ navigation }) {
           renderItem={({ item }) => (
             <Pressable style={styles.item} onPress={() => goEdit(item)}>
               <Image
-                source={require('../../assets/avatar-placeholder.png')}
+                source={
+                  item.foto
+                    ? { uri: item.foto }
+                    : require('../../assets/avatar-placeholder.png')
+                }
                 style={styles.avatar}
               />
               <View style={{ flex: 1 }}>

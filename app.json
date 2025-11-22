@@ -13,7 +13,7 @@
     },
     "plugins": [],
     "extra": {
-      "apiUrl": "http://192.168.0.15:3000"
+      "apiUrl": "http://192.168.0.3:3000"
     },
     "ios": { "supportsTablet": true },
     "android": {

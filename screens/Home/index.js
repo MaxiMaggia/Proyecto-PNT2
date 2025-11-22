@@ -20,6 +20,13 @@ export default function Home({ navigation }) {
       >
         <Text style={styles.btnText}>Veterinarias Cercanas</Text>
       </Pressable>
+
+      <Pressable
+        style={styles.btn}
+        onPress={() => navigation.navigate('Profile')}
+      >
+        <Text style={styles.btnText}>Mi Perfil</Text>
+      </Pressable>
     </View>
   );
 }

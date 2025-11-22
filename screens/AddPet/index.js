@@ -14,9 +14,8 @@ import styles from './styles';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { usePets } from '../../context/PetsContext';
-import { Picker } from '@react-native-picker/picker';
-import { buildUrl, endpoints } from '../../config/api';
 import axios from 'axios';
+import { pickImageOrTakePhoto } from '../../services/camera';
 
 
 export default function AddPet({ navigation, route }) {
@@ -43,7 +42,16 @@ export default function AddPet({ navigation, route }) {
   const [showModal, setShowModal] = useState(false);
   const [types, setTypes] = useState([]);
   const [loadingTypes, setLoadingTypes] = useState(true);
-  const [selectedBreed, setSelectedBreed] = useState(null);
+  const [imageUri, setImageUri] = useState(pet?.foto || null);
+
+  // Actualizar la imagen cuando cambie el pet (al editar)
+  useEffect(() => {
+    if (pet?.foto) {
+      setImageUri(pet.foto);
+    } else {
+      setImageUri(null);
+    }
+  }, [pet?.foto]);
 
 
   // Carga los tipos de animales
@@ -51,7 +59,7 @@ export default function AddPet({ navigation, route }) {
     const fetchTypes = async () => {
       try {
 
-        const url = "http://192.168.0.15:3000/api/animals";  
+        const url = "http://192.168.0.3:3000/api/animals";  
         const res = await axios.get(url);
         setTypes(res.data); 
       } catch (err) {
@@ -70,7 +78,7 @@ export default function AddPet({ navigation, route }) {
       try {
         setLoadingBreeds(true);
   
-        const urlTipos = "http://192.168.0.15:3000/api/animals";
+        const urlTipos = "http://192.168.0.3:3000/api/animals";
         const tiposRes = await axios.get(urlTipos);
   
         const typeNormalized = type.trim().toLowerCase();
@@ -85,7 +93,7 @@ export default function AddPet({ navigation, route }) {
           return;
         }
   
-        const urlRaza = "http://192.168.0.15:3000/api/raza";
+        const urlRaza = "http://192.168.0.3:3000/api/raza";
         const razasRes = await axios.get(urlRaza, {
           params: { typeId: tipoEncontrado.id }
         });
@@ -106,6 +114,13 @@ export default function AddPet({ navigation, route }) {
 
   const goBack = () => navigation.goBack();
 
+  const handlePickImage = async () => {
+    const uri = await pickImageOrTakePhoto();
+    if (uri) {
+      setImageUri(uri);
+    }
+  };
+
   const handleSave = async () => {
     const edadNum =
       age === '' || Number.isNaN(Number(age)) ? null : Number(age);
@@ -121,7 +136,7 @@ export default function AddPet({ navigation, route }) {
       raza: breed.trim(),
       edad: edadNum,
       cantidadVacunas: vacNum,
-      foto: pet?.foto ?? null,
+      foto: imageUri || null,
     };
 
     try {
@@ -170,34 +185,30 @@ export default function AddPet({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <SafeAreaView style={[styles.container, { paddingBottom: insets.bottom }]} edges={['bottom']}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* HEADER */}
-        <View style={styles.header}>
-          <Text style={styles.title}>
-            {isEdit ? 'Editar Mascota' : 'Añadir Mascota'}
-          </Text>
-          <View style={{ width: 44 }} />
-        </View>
-
         {/* CONTENIDO */}
-        <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}>
-          {/* Avatar mock + botón cámara (todavía no funcional) */}
+        <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 24 }}>
+          {/* Avatar + botón cámara */}
           <View style={styles.uploaderWrap}>
             <View style={styles.avatarWrap}>
               <Image
-                source={require('../../assets/avatar-placeholder.png')}
+                source={
+                  imageUri
+                    ? { uri: imageUri }
+                    : require('../../assets/avatar-placeholder.png')
+                }
                 style={styles.avatar}
               />
-              <Pressable style={styles.cameraBtn}>
+              <Pressable style={styles.cameraBtn} onPress={handlePickImage}>
                 <Text style={styles.cameraIcon}>📷</Text>
               </Pressable>
             </View>
             <Text style={styles.uploaderHint}>
-              Foto opcional (por ahora solo decorativo)
+              Toca el ícono para agregar o cambiar la foto
             </Text>
           </View>
 

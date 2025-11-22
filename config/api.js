@@ -3,7 +3,7 @@ import Constants from 'expo-constants';
 const API_URL =
   Constants.expoConfig?.extra?.apiUrl ||
   Constants.manifest?.extra?.apiUrl ||
-  'http://192.168.0.15:3000'; 
+  'http://192.168.0.3:3000'; 
 
 export const buildUrl = (path) => {
   if (!path) return API_URL;

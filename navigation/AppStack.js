@@ -6,6 +6,8 @@ import VetDetail from '../screens/VetDetail';
 import PetList from '../screens/PetList';
 import AddPet from '../screens/AddPet';
 import Home from '../screens/Home';
+import Profile from '../screens/Profile';
+import EditProfile from '../screens/Profile/EditProfile';
 import AppBar from '../components/AppBar';
 import { useAuth } from '../context/AuthContext';
 import useLogoutAlert from '../hooks/useLogoutAlert';
@@ -43,7 +45,18 @@ export default function AppStack() {
       <Stack.Screen name="PetList" component={PetList} options={{
         header: () => <AppBar title="Mis mascotas" showBackButton={true} showLogoutButton={false} />
       }} />
-      <Stack.Screen name="AddPet" component={AddPet} />
+      <Stack.Screen name="AddPet" component={AddPet} options={{
+        header: ({ route }) => {
+          const isEdit = !!route.params?.pet;
+          return <AppBar title={isEdit ? "Editar Mascota" : "Añadir Mascota"} showBackButton={true} showLogoutButton={false} />;
+        }
+      }} />
+      <Stack.Screen name="Profile" component={Profile} options={{
+        header: () => <AppBar title="Mi Perfil" showBackButton={true} showLogoutButton={false} />
+      }} />
+      <Stack.Screen name="EditProfile" component={EditProfile} options={{
+        header: () => <AppBar title="Editar Perfil" showBackButton={true} showLogoutButton={false} />
+      }} />
     </Stack.Navigator>
   );
 }

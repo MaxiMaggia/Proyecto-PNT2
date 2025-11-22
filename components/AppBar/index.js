@@ -27,7 +27,7 @@ export default function AppBar({
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 20 }]}>
+    <View style={[styles.container, { paddingTop: insets.top + 12 }]}>
       {showBackButton ? (
         <Pressable
           onPress={handleLeftPress}
@@ -38,7 +38,9 @@ export default function AppBar({
         >
           <Text style={styles.iconGreen}>←</Text>
         </Pressable>
-      ) : null}
+      ) : (
+        <View style={{ width: 44 }} />
+      )}
 
       <Text style={[styles.titleBase, titleStyle]} numberOfLines={1}>
         {title}
@@ -54,7 +56,9 @@ export default function AppBar({
         >
           <Text style={styles.iconGreen}>⏻</Text>
         </Pressable>
-      ) : null}
+      ) : (
+        <View style={{ width: 44 }} />
+      )}
     </View>
   );
 }
