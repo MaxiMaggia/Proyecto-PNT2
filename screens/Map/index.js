@@ -107,7 +107,7 @@ export default function MapScreen({ navigation }) {
             <View style={styles.sheetHandle} />
           </Pressable>
 
-          <Text style={styles.sheetTitle}>Vets Near You</Text>
+          <Text style={styles.sheetTitle}>Veterinarias cerca</Text>
 
           {loading ? (
             <Text style={styles.loading}>Cargando…</Text>

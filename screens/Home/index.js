@@ -1,11 +1,19 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, ImageBackground, Image } from 'react-native';
 import styles from './styles';
+
 
 export default function Home({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Mascotas App</Text>
+    <ImageBackground 
+  source={require('../../assets/pets.jpg')}
+  style={styles.container}
+  imageStyle={{ opacity: 0.08 }}
+>
+      {/* <Image
+        source={require('../../assets/paw.png')}
+        style={styles.logo}
+      /> */}
 
       <Pressable
         style={styles.btn}
@@ -27,6 +35,6 @@ export default function Home({ navigation }) {
       >
         <Text style={styles.btnText}>Mi Perfil</Text>
       </Pressable>
-    </View>
+    </ImageBackground>
   );
 }

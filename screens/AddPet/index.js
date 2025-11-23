@@ -16,6 +16,8 @@ import Button from '../../components/ui/Button';
 import { usePets } from '../../context/PetsContext';
 import axios from 'axios';
 import { pickImageOrTakePhoto } from '../../services/camera';
+import { buildUrl, endpoints } from '../../config/api';
+import Toast from 'react-native-toast-message';
 
 
 export default function AddPet({ navigation, route }) {
@@ -58,12 +60,12 @@ export default function AddPet({ navigation, route }) {
   useEffect(() => {
     const fetchTypes = async () => {
       try {
-
-        const url = "http://192.168.0.3:3000/api/animals";  
+        const url = buildUrl(endpoints.animals.getAll);
         const res = await axios.get(url);
-        setTypes(res.data); 
+        setTypes(res.data || []); 
       } catch (err) {
         console.log("Error cargando tipos:", err);
+        setTypes([]);
       } finally {
         setLoadingTypes(false);
       }
@@ -74,34 +76,41 @@ export default function AddPet({ navigation, route }) {
 
   // Carga las razas de los animales
   useEffect(() => {
+    // No cargar razas si no hay tipo seleccionado
+    if (!type || type.trim() === '') {
+      setBreeds([]);
+      return;
+    }
+
     const fetchBreeds = async () => {
       try {
         setLoadingBreeds(true);
   
-        const urlTipos = "http://192.168.0.3:3000/api/animals";
+        const urlTipos = buildUrl(endpoints.animals.getAll);
         const tiposRes = await axios.get(urlTipos);
   
         const typeNormalized = type.trim().toLowerCase();
   
-        const tipoEncontrado = tiposRes.data.find(
-          t => t.type.trim().toLowerCase() === typeNormalized
+        const tipoEncontrado = tiposRes.data?.find(
+          t => t.type?.trim().toLowerCase() === typeNormalized
         );
   
         if (!tipoEncontrado) {
-          console.log(":", type);
+          console.log("Tipo no encontrado:", type);
           setBreeds([]);
           return;
         }
   
-        const urlRaza = "http://192.168.0.3:3000/api/raza";
+        const urlRaza = buildUrl(endpoints.razas.base);
         const razasRes = await axios.get(urlRaza, {
           params: { typeId: tipoEncontrado.id }
         });
   
-        setBreeds(razasRes.data);
+        setBreeds(razasRes.data || []);
   
       } catch (err) {
         console.log("Error cargando razas:", err);
+        setBreeds([]);
       } finally {
         setLoadingBreeds(false);
       }
@@ -139,15 +148,55 @@ export default function AddPet({ navigation, route }) {
       foto: imageUri || null,
     };
 
+    if (!name.trim()) {
+      return Toast.show({
+        type: 'error',
+        text1: 'El nombre es obligatorio',
+      });
+    }
+    
+    if (!type.trim()) {
+      return Toast.show({
+        type: 'error',
+        text1: 'El tipo es obligatorio',
+      });
+    }
+    
+    if (!breed.trim()) {
+      return Toast.show({
+        type: 'error',
+        text1: 'La raza es obligatoria',
+      });
+    }
+    
+
     try {
       if (isEdit && (pet._id || pet.id)) {
         await editPet(pet._id || pet.id, formData);
       } else {
         await addPet(formData);
       }
-      navigation.goBack();
+      
+      Toast.show({
+        type: 'success',
+        text1: 'Mascota guardada correctamente',
+      });
+      setTimeout(() => {
+        navigation.goBack();
+      }, 1200);
     } catch (err) {
       console.log('Error en handleSave', err);
+    
+      const message =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        "No se pudo guardar la mascota";
+    
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: message
+      });
     }
   };
 
@@ -219,6 +268,8 @@ export default function AddPet({ navigation, route }) {
               value={name}
               onChangeText={setName}
               placeholder="Introduce el nombre"
+              style={{ marginTop: 8 }}
+              autoCapitalize="words"
             />
           </View>
 
@@ -226,9 +277,14 @@ export default function AddPet({ navigation, route }) {
           <View style={styles.field}>
             <Text style={styles.label}>Tipo de animal</Text>
               <Pressable onPress={() => setShowModal(true)} style={styles.selectBox}>
-                <Text style={styles.selectText}>
-                  {type || "Selecciona un tipo"}
-                </Text>
+              <Text
+                style={[
+                  styles.selectText,
+                  !type && { color: '#94a3b8' } 
+                ]}
+              >
+                {type || "Selecciona un tipo"}
+              </Text>
               </Pressable>
           </View>
         {showModal && (
@@ -255,9 +311,14 @@ export default function AddPet({ navigation, route }) {
           <Text style={styles.label}>Raza</Text>
 
           <Pressable onPress={() => setShowBreedModal(true)} style={styles.selectBox}>
-            <Text style={styles.selectText}>
-              {breed || "Selecciona una raza"}
-            </Text>
+          <Text
+            style={[
+              styles.selectText,
+              !breed && { color: '#94a3b8' } 
+            ]}
+          >
+            {breed || "Selecciona una raza"}
+          </Text>
           </Pressable>
 
           {showBreedModal && (
@@ -297,7 +358,7 @@ export default function AddPet({ navigation, route }) {
               style={{ marginTop: 8 }}
               value={age}
               onChangeText={setAge}
-              placeholder="Ej: 5"
+              placeholder="Edad"
               keyboardType="numeric"
             />
           </View>
@@ -309,8 +370,8 @@ export default function AddPet({ navigation, route }) {
               style={{ marginTop: 8 }}
               value={vaccines}
               onChangeText={setVaccines}
-              placeholder="Ej: 3"
-              keyboardType="numeric"
+                placeholder="Vacunas"
+                keyboardType="numeric"
             />
           </View>
 

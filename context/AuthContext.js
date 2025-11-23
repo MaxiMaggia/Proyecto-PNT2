@@ -69,7 +69,6 @@ export function AuthProvider({ children }) {
       response => response,
       error => {
         if (error.response?.status === 401) {
-          console.log("Token expirado → logout()");
           logout();        
         }
         return Promise.reject(error);
