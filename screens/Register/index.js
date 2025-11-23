@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, Alert } from 'react-native';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
@@ -21,6 +21,11 @@ export default function Register({ navigation }) {
   const [direccion, setDireccion] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+
+  const isFormValid = useMemo(() => {
+    return nombreCompleto.trim() && email.trim() && password.trim();
+  }, [nombreCompleto, email, password]);
 
   const handleRegister = async () => {
     setErrors({});
@@ -134,11 +139,16 @@ export default function Register({ navigation }) {
       <Button
         title="Registrarme"
         onPress={handleRegister}
-        style={styles.primary}
-        textStyle={styles.primaryText}
+        style={[
+          styles.primary,
+          { backgroundColor: '#4caf50' },
+          (!isFormValid) && { opacity: 0.5 }
+        ]}
+        textStyle={{ color: 'white' }}
+        disabled={!isFormValid}
       />
 
-      <Text style={styles.link} onPress={() => navigation.goBack()}>
+      <Text style={{ color: '#4caf50', fontWeight: '700' }} onPress={() => navigation.goBack()}>
         Ya tengo cuenta → Iniciar Sesión
       </Text>
     </View>

@@ -21,6 +21,7 @@ import vetsData from '../../data/vets';
 import AppBar from '../../components/AppBar';
 import { useAuth } from '../../context/AuthContext';
 import MapViewBase from './MapViewBase';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 function Stars({ rating = 0 }) {
@@ -94,7 +95,7 @@ export default function MapScreen({ navigation }) {
         <View style={[styles.routeChip, { top: headerHeight + 8 }]}>
           <Text style={styles.routeChipTxt}>En ruta a: {routingTo.name}</Text>
           <Pressable style={styles.routeChipClose} onPress={() => setRoutingTo(null)}>
-            <Text style={styles.routeChipCloseTxt}>✕</Text>
+            <MaterialCommunityIcons name="close" size={20} color="white" />
           </Pressable>
         </View>
       )}
@@ -143,7 +144,7 @@ export default function MapScreen({ navigation }) {
         <View style={styles.infoPanel}>
           <View style={styles.dirHeader}>
             <Pressable onPress={() => setSelectedVet(null)} style={styles.dirBackBtn}>
-              <Text style={styles.dirBackIcon}>←</Text>
+              <MaterialCommunityIcons name="arrow-left" size={20} color="black" />
             </Pressable>
             <Text style={styles.dirTitle}>{selectedVet.name}</Text>
             <View style={{ width: 44 }} />
@@ -165,8 +166,8 @@ export default function MapScreen({ navigation }) {
           </View>
 
           <View style={[styles.dirActions, { justifyContent: 'flex-end' }]}>
-            <Pressable style={styles.btn} onPress={startDirections}>
-              <Text style={styles.btnTxt}>Indicaciones</Text>
+            <Pressable style={[styles.btn, { backgroundColor: '#4caf50' }]} onPress={startDirections}>
+              <Text style={[styles.btnTxt, { color: 'white' }]}>Indicaciones</Text>
             </Pressable>
             <View style={{ width: 10 }} />
             <Pressable style={styles.btnOutline} onPress={() => openExternalMaps(selectedVet)}>

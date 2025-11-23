@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, Alert, ScrollView } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext';
@@ -7,6 +7,7 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import styles from './styles';
 import Toast from 'react-native-toast-message';
+import { validateEmail } from '../../src/utils/validators';
 
 export default function EditProfile({ navigation, route }) {
   const insets = useSafeAreaInsets();
@@ -18,11 +19,12 @@ export default function EditProfile({ navigation, route }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const validateEmail = (value) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(value);
-  };
+  const hasChanges = useMemo(() => {
+    return nombreCompleto.trim() !== user?.nombreCompleto?.trim() ||
+    email.trim() !== user?.email?.trim();
+  }, [nombreCompleto, email, user]);
 
+  
   const handleSave = async () => {
     if (!nombreCompleto.trim()) {
       Toast.show({
@@ -33,7 +35,7 @@ export default function EditProfile({ navigation, route }) {
       return;
     }
 
-     if (email.trim() !== user.email && !validateEmail(email.trim())) {
+     if (email !== user.email && !validateEmail(email)) {
       Toast.show({
         type: 'error',
         text1: 'Error',
@@ -49,8 +51,8 @@ export default function EditProfile({ navigation, route }) {
         nombreCompleto: nombreCompleto.trim(),
       };
 
-      if (email.trim() !== user.email) {
-        updatePayload.email = email.trim();
+      if (email !== user.email) {
+        updatePayload.email = email;
       }
 
       await updateUser(userId, updatePayload);
@@ -106,21 +108,29 @@ export default function EditProfile({ navigation, route }) {
 
           <View style={{ marginTop: 8 }}>
             <Button
-              title="Cambiar contraseña"
-              onPress={() => navigation.navigate('ChangePassword')}
-              style={{ backgroundColor: '#4caf50' }}
-              textStyle={{ color: 'white' }}
-              disabled={loading}
-            />
-          </View>
-          
-          <View style={{ marginTop: 8 }}>
-            <Button
               title={loading ? 'Guardando...' : 'Guardar cambios'}
               onPress={handleSave}
-              disabled={loading}
+              disabled={loading || !hasChanges}
+              style={[
+                { backgroundColor: '#4caf50' },
+                (!hasChanges || loading) && { opacity: 0.5 }
+              ]}
+              textStyle={{ color: 'white' }}
             />
           </View>
+
+          <Text
+            style={{
+              color: '#64748b',
+              marginTop: 12,
+              fontSize: 14,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+            }}
+            onPress={() => navigation.navigate('ChangePassword')}
+          >
+            Cambiar contraseña
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -4,6 +4,7 @@ import styles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import useLogoutAlert from '../../hooks/useLogoutAlert';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AppBar({
   title = '',
@@ -36,7 +37,7 @@ export default function AppBar({
           accessibilityLabel="Volver"
           accessibilityRole="button"
         >
-          <Text style={styles.iconGreen}>←</Text>
+          <MaterialCommunityIcons name="arrow-left" size={20} color="white" />
         </Pressable>
       ) : (
         <View style={{ width: 44 }} />
@@ -54,7 +55,7 @@ export default function AppBar({
           accessibilityLabel="Cerrar sesión"
           accessibilityRole="button"
         >
-          <Text style={styles.iconGreen}>⏻</Text>
+          <MaterialCommunityIcons name="power" size={20} color="white" />
         </Pressable>
       ) : (
         <View style={{ width: 44 }} />

@@ -25,9 +25,9 @@ export default StyleSheet.create({
     position: 'absolute', right: -2, bottom: -2,
     width: 40, height: 40, borderRadius: 20,
     alignItems: 'center', justifyContent: 'center',
-    backgroundColor: '#13ec13'
+    backgroundColor: '#4caf50'
   },
-  cameraIcon: { fontSize: 18, fontWeight: '800', color: '#102210' },
+  cameraIcon: { fontSize: 18, fontWeight: '800', color: 'white' },
   uploaderHint: { marginTop: 6, color: '#cbd5e1' },
 
   field: { marginTop: 10 },

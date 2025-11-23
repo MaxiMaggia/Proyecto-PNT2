@@ -13,7 +13,7 @@ export default function Button({ title, onPress, style, textStyle, ...rest }) {
         {
           height: 48,
           borderRadius: 12,
-          backgroundColor: GREEN,
+          backgroundColor: '#4caf50',
           alignItems: 'center',
           justifyContent: 'center',
           paddingHorizontal: 18,
@@ -24,7 +24,7 @@ export default function Button({ title, onPress, style, textStyle, ...rest }) {
       hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       {...rest}
     >
-      <Text style={[{ color: DARK, fontWeight: '800' }, textStyle]}>{title}</Text>
+      <Text style={[{ color: '#102210', fontWeight: '800' }, textStyle]}>{title}</Text>
     </Pressable>
   );
 }

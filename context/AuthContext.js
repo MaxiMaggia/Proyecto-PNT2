@@ -43,7 +43,6 @@ export function AuthProvider({ children }) {
       await AsyncStorage.setItem(STORAGE_TOKEN_KEY, token);
       await AsyncStorage.setItem(STORAGE_USERID_KEY, String(userId));
     } catch (err) {
-      console.error('Error en login', err?.response?.data || err.message);
       throw err;
     }
   };
