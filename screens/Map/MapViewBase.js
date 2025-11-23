@@ -22,7 +22,7 @@ export default function MapViewBase({ vets = [], onSelectVet }) {
             latitude: vet.coords.lat,
             longitude: vet.coords.lng
           }}
-          pinColor={vet.open ? 'green' : 'gray'}
+          pinColor={vet.open ? 'green' : 'blue'}
           onPress={() => onSelectVet?.(vet)}
         />
       ))}
