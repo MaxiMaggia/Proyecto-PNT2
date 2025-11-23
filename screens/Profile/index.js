@@ -98,6 +98,8 @@
           <Button
             title="Editar Perfil"
             onPress={() => navigation.navigate('EditProfile', { user })}
+            style={{ backgroundColor: '#4caf50' }}
+            textStyle={{ color: 'white' }}
           />
         </View>
       </ScrollView>

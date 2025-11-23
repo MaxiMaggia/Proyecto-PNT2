@@ -112,6 +112,8 @@ export default function ChangePassword({ navigation }) {
               title={loading ? 'Guardando...' : 'Guardar contraseña'}
               onPress={handleSavePassword}
               disabled={loading}
+              style={{ backgroundColor: '#4caf50' }}
+              textStyle={{ color: 'white' }}
             />
           </View>
         </View>

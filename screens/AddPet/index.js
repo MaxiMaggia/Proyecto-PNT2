@@ -18,6 +18,7 @@ import axios from 'axios';
 import { pickImageOrTakePhoto } from '../../services/camera';
 import { buildUrl, endpoints } from '../../config/api';
 import Toast from 'react-native-toast-message';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 export default function AddPet({ navigation, route }) {
@@ -252,8 +253,8 @@ export default function AddPet({ navigation, route }) {
                 }
                 style={styles.avatar}
               />
-              <Pressable style={styles.cameraBtn} onPress={handlePickImage}>
-                <Text style={styles.cameraIcon}>📷</Text>
+              <Pressable style={styles.cameraBtn} onPress={handlePickImage} >
+                <MaterialCommunityIcons style={styles.cameraIcon} name="camera"/>
               </Pressable>
             </View>
             <Text style={styles.uploaderHint}>
@@ -380,6 +381,8 @@ export default function AddPet({ navigation, route }) {
             <Button
               title={isEdit ? 'Guardar cambios' : 'Guardar mascota'}
               onPress={handleSave}
+              style={{ backgroundColor: '#4caf50' }}
+              textStyle={{ color: 'white' }}
             />
 
             {isEdit && (

@@ -6,10 +6,10 @@ import styles from './styles';
 export default function Home({ navigation }) {
   return (
     <ImageBackground 
-  source={require('../../assets/pets.jpg')}
-  style={styles.container}
-  imageStyle={{ opacity: 0.08 }}
->
+          source={require('../../assets/pets.jpg')}
+          style={styles.container}
+          imageStyle={{ opacity: 0.08 }}
+        >
       {/* <Image
         source={require('../../assets/paw.png')}
         style={styles.logo}

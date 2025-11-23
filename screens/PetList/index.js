@@ -6,8 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import { usePets } from '../../context/PetsContext';
 import EmptyState from '../../components/ui/EmptyState';
-import { Feather } from '@expo/vector-icons';
-import Toast from 'react-native-toast-message';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function PetList({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -60,11 +59,11 @@ export default function PetList({ navigation }) {
       )}
 
       <Pressable
-        style={[styles.fab, { bottom: insets.bottom + 28, right: 20 }]}
+        style={[styles.fab, { bottom: insets.bottom + 28, right: 20 }, { backgroundColor: '#4caf50' }]}
         onPress={() => navigation.navigate('AddPet')}
         hitSlop={{ top: 8, left: 8, right: 8, bottom: 8 }}
       >
-        <Text style={styles.fabPlus}>＋</Text>
+        <MaterialCommunityIcons name="plus" size={20} color="white" />
       </Pressable>
     </SafeAreaView>
   );
