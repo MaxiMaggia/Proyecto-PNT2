@@ -22,7 +22,7 @@ import AppBar from '../../components/AppBar';
 import { useAuth } from '../../context/AuthContext';
 import MapViewBase from './MapViewBase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { PanResponder } from 'react-native';
 
 function Stars({ rating = 0 }) {
   const full = Math.floor(rating);
@@ -45,6 +45,35 @@ export default function MapScreen({ navigation }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedVet, setSelectedVet] = useState(null);
   const [routingTo, setRoutingTo] = useState(null);
+
+  const panResponder = useMemo(() => 
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gesture) => {
+        return Math.abs(gesture.dy) > 10; 
+      },
+  
+      onPanResponderMove: (_, gesture) => {
+        let next = gesture.dy + (sheetOpen ? 0 : DRAG_MAX);
+        if (next < 0) next = 0;
+        if (next > DRAG_MAX) next = DRAG_MAX;
+        dragY.setValue(next);
+      },
+  
+      onPanResponderRelease: (_, gesture) => {
+        const shouldOpen = gesture.dy < 0; // si arrastró hacia arriba
+        const finalPos = shouldOpen ? 0 : DRAG_MAX;
+  
+        setSheetOpen(shouldOpen);
+  
+        Animated.spring(dragY, {
+          toValue: finalPos,
+          useNativeDriver: true,
+          speed: 20,
+          bounciness: 0,
+        }).start();
+      },
+    })
+  , [sheetOpen, dragY]);
 
   // Lista mockeada de vets
   const { data: list = [], loading } = useFocusData(async () => vetsData, []);
@@ -102,7 +131,7 @@ export default function MapScreen({ navigation }) {
 
 
       {!selectedVet && (
-        <Animated.View style={[styles.sheet, { transform: [{ translateY: dragY }] }]}>
+        <Animated.View style={[styles.sheet, { transform: [{ translateY: dragY }] }]} {...panResponder.panHandlers} >
           {/* Manija: toca para abrir/cerrar */}
           <Pressable style={styles.sheetHandleWrap} onPress={toggleSheet}>
             <View style={styles.sheetHandle} />
@@ -129,7 +158,7 @@ export default function MapScreen({ navigation }) {
                       item.open ? styles.badgeOpen : styles.badgeClosed,
                     ]}
                   >
-                    <Text style={styles.badgeText}>{item.open ? 'Open' : 'Closed'}</Text>
+                    <Text style={styles.badgeText}>{item.open ? 'Abierto' : 'Cerrado'}</Text>
                   </View>
                   <Text style={styles.distance}>{item.distanceKm} km</Text>
                 </Pressable>

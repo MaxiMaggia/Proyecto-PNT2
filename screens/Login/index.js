@@ -30,7 +30,7 @@ export default function Login({ navigation }) {
   if (!isConnected) {
     return (
       <View style={styles.container}>
-        <Text style={styles.brand}>PawCare</Text>
+        <Text style={styles.brand}>PetCare</Text>
         <Text style={styles.error}>No hay conexión a internet</Text>
       </View>
     );
