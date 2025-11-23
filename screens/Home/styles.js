@@ -5,8 +5,9 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#fdfdfd',
+    paddingHorizontal: 16,
+  paddingTop: 40,
+    backgroundColor: '#102210',
   },
   title: {
     fontSize: 28,

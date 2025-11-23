@@ -6,25 +6,6 @@ export default StyleSheet.create({
     backgroundColor: '#102210',
   },
 
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-
-  loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#cbd5e1',
-  },
-
-  errorText: {
-    fontSize: 16,
-    color: '#ef4444',
-    textAlign: 'center',
-  },
-
   scrollContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
@@ -39,12 +20,11 @@ export default StyleSheet.create({
   },
 
   content: {
-    marginTop: 8,
     gap: 12,
   },
 
   field: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
 
   label: {
@@ -54,11 +34,5 @@ export default StyleSheet.create({
     marginBottom: 4,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-  },
-
-  value: {
-    fontSize: 18,
-    color: '#ffffff',
-    fontWeight: '500',
   },
 });

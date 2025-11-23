@@ -12,6 +12,7 @@ import AppBar from '../components/AppBar';
 import { useAuth } from '../context/AuthContext';
 import useLogoutAlert from '../hooks/useLogoutAlert';
 import { useNavigation } from '@react-navigation/native';
+import ChangePassword from '../screens/Profile/ChangePassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +58,13 @@ export default function AppStack() {
       <Stack.Screen name="EditProfile" component={EditProfile} options={{
         header: () => <AppBar title="Editar Perfil" showBackButton={true} showLogoutButton={false} />
       }} />
+      <Stack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            header: () => <AppBar title="Cambiar contraseña" showBackButton={true} showLogoutButton={false} />
+          }}
+      />
     </Stack.Navigator>
   );
 }

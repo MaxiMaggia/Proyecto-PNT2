@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
+import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from '../../components/ui/Input';
@@ -51,12 +52,14 @@ export default function Register({ navigation }) {
         password,
       });
   
-      Alert.alert(
-        "Registro exitoso",
-        "Revisá tu correo electrónico y activá tu cuenta antes de iniciar sesión."
-      );
-  
-      navigation.replace("Login");
+      Toast.show({
+        type: 'success',
+        text1: 'Registro exitoso',
+        text2: 'Revisá tu correo electrónico y activá tu cuenta antes de iniciar sesión.',
+      });
+      setTimeout(() => {
+        navigation.replace("Login");
+      }, 1200);
   
     } catch (err) {
             console.log('Error completo:', err);

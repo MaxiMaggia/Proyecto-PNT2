@@ -6,6 +6,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import { usePets } from '../../context/PetsContext';
 import EmptyState from '../../components/ui/EmptyState';
+import { Feather } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 
 export default function PetList({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -51,7 +53,7 @@ export default function PetList({ navigation }) {
                   {(item.tipo || item.type) ?? '—'} • {(item.raza || item.breed) ?? '—'}
                 </Text>
               </View>
-              <Text style={{ fontSize: 22, color: '#334155' }}>✎</Text>
+              <Feather name="edit" size={15} color="#334155" />
             </Pressable>
           )}
         />
