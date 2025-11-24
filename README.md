@@ -1,18 +1,22 @@
-# Vet Finder (maqueta RN)
+# Vet Finder
 
-- Pantallas: Login, Mapa, Detalle, Cómo llegar, Mis Mascotas, Añadir Mascota.
+- Pantallas: Login, Registro, Mapa, Detalle Veterinaria, Mis Mascotas, Añadir/Editar Mascota, Perfil.
 - Hooks:
-  - `useHydrateAuth`: hidrata sesión (futuro AsyncStorage).
-  - `useFocusData`: refresca datos al enfocarse la screen.
+  - `useHydrateAuth`: hidrata sesión desde AsyncStorage.
+  - `useFocusData`: recarga datos automáticamente cada vez que la pantalla se vuelve visible (útil para mantener datos actualizados al navegar entre pantallas).
+  - `useLogoutAlert`: alerta de cierre de sesión.
 
-## Notas:
-  - `Mapa`: imagen placeholder.
-  - `Vets`: data/vets.js.
-  - `Filtros`: solo UI (modal).
-  - `Mascotas`: estado en memoria (Context).
+## Backend (persiste):
+  -  **Autenticación**: Login y Registro conectados a API.
+  -  **Sesión**: Token y userId guardados en AsyncStorage.
+  -  **Mascotas**: CRUD completo (crear, leer, actualizar, eliminar) desde API.
+  -  **Usuarios**: Perfil y edición conectados a API.
+  -  **Tipos y Razas**: obtenidos desde API al agregar/editar mascotas.
+
+## Mock (no persiste):
+  -  **Veterinarias**: datos estáticos en `data/vets.js`.
 
 ## Scripts:
 ```bash
-npm run start
-npx expo start --tunnel 
-
+npx expo start --tunnel
+npx expo start 
