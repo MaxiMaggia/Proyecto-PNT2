@@ -1,6 +1,6 @@
 
 
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,18 +11,13 @@ import {
   Linking,
   Platform,
   Animated,
-  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image as ExpoImage } from 'expo-image';
 import styles, { DRAG_MAX } from './styles';
 import useFocusData from '../../hooks/useFocusData';
 import vetsData from '../../data/vets';
-import AppBar from '../../components/AppBar';
-import { useAuth } from '../../context/AuthContext';
 import MapViewBase from './MapViewBase';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { PanResponder } from 'react-native';
 
 function Stars({ rating = 0 }) {
   const full = Math.floor(rating);
@@ -37,51 +32,43 @@ function Stars({ rating = 0 }) {
   );
 }
 
+
+
 export default function MapScreen({ navigation }) {
-  const { logout } = useAuth();
   const insets = useSafeAreaInsets();
 
-  // UI local
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedVet, setSelectedVet] = useState(null);
   const [routingTo, setRoutingTo] = useState(null);
 
-  const panResponder = useMemo(() => 
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (_, gesture) => {
-        return Math.abs(gesture.dy) > 10; 
-      },
+  const myPosRef = useRef({
+    lat: -34.6037,
+    lng: -58.3790,
+  });
   
-      onPanResponderMove: (_, gesture) => {
-        let next = gesture.dy + (sheetOpen ? 0 : DRAG_MAX);
-        if (next < 0) next = 0;
-        if (next > DRAG_MAX) next = DRAG_MAX;
-        dragY.setValue(next);
-      },
-  
-      onPanResponderRelease: (_, gesture) => {
-        const shouldOpen = gesture.dy < 0; // si arrastró hacia arriba
-        const finalPos = shouldOpen ? 0 : DRAG_MAX;
-  
-        setSheetOpen(shouldOpen);
-  
-        Animated.spring(dragY, {
-          toValue: finalPos,
-          useNativeDriver: true,
-          speed: 20,
-          bounciness: 0,
-        }).start();
-      },
-    })
-  , [sheetOpen, dragY]);
+  const [, forceUpdate] = useState(0);
+  const refresh = () => forceUpdate(n => n + 1);
 
-  // Lista mockeada de vets
+  function moveMyPosition(deltaLat, deltaLng) {
+    myPosRef.current = {
+      lat: myPosRef.current.lat + deltaLat,
+      lng: myPosRef.current.lng + deltaLng,
+    };
+    refresh();
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      moveMyPosition(0, -0.00005); 
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, []);
+vets
   const { data: list = [], loading } = useFocusData(async () => vetsData, []);
 
-  // Altura efectiva del header (franja verde + safe-top)
   const headerHeight = useMemo(() => insets.top + 64 + 8, [insets.top]);
 
-  // ===== Bottom Sheet
   const dragY = useRef(new Animated.Value(DRAG_MAX)).current; 
   const [sheetOpen, setSheetOpen] = useState(false);
 
@@ -96,7 +83,6 @@ export default function MapScreen({ navigation }) {
     }).start();
   };
 
-  // Abrir app de mapas nativa con coords
   const openExternalMaps = (vet) => {
     if (!vet?.coords) return;
     const { lat, lng } = vet.coords;
@@ -107,7 +93,6 @@ export default function MapScreen({ navigation }) {
     if (url) Linking.openURL(url).catch(() => {});
   };
 
-  // Marcar clínica como destino “en ruta”
   const startDirections = () => {
     if (!selectedVet) return;
     setRoutingTo(selectedVet);
@@ -116,8 +101,8 @@ export default function MapScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Mapa (placeholder) */}
-      <MapViewBase vets={list} onSelectVet={setSelectedVet} />
+      {/* Mapa */}
+      <MapViewBase vets={list} onSelectVet={setSelectedVet} userLocation={myPosRef.current} />
 
       {/* Chip “En ruta a …” */}
       {routingTo && (
@@ -131,10 +116,14 @@ export default function MapScreen({ navigation }) {
 
 
       {!selectedVet && (
-        <Animated.View style={[styles.sheet, { transform: [{ translateY: dragY }] }]} {...panResponder.panHandlers} >
+        <Animated.View style={[styles.sheet, { transform: [{ translateY: dragY }] }]} >
           {/* Manija: toca para abrir/cerrar */}
           <Pressable style={styles.sheetHandleWrap} onPress={toggleSheet}>
-            <View style={styles.sheetHandle} />
+          <MaterialCommunityIcons
+              name={sheetOpen ? "chevron-down" : "chevron-up"}
+              size={28}
+              color="#888"
+            />
           </Pressable>
 
           <Text style={styles.sheetTitle}>Veterinarias cerca</Text>

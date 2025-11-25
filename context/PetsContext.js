@@ -34,7 +34,7 @@ export function PetsProvider({ children }) {
   const addPet = useCallback(
     async (formData) => {
       if (!userId) {
-        console.log('❌ userId no definido en AuthContext');
+        console.log('Error: userId no definido en AuthContext');
         Alert.alert('Error', 'Tu sesión expiró. Iniciá sesión nuevamente.');
         return;
       }

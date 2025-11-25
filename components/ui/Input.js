@@ -12,6 +12,7 @@ export default function Input(props) {
           paddingHorizontal: 12,
           backgroundColor: '#f6f8f6',
           color: '#0f172a',
+          fontSize: 16,
         },
         props.style,
       ]}

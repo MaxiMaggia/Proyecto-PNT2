@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, Text, Alert } from 'react-native';
+import { View, Text } from 'react-native';
 import styles from './styles';
 import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/ui/Input';

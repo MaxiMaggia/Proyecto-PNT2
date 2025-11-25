@@ -37,7 +37,9 @@ export default StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 12,
     backgroundColor: '#f6f8f6',
-    color: '#0f172a'
+    color: '#0f172a',
+    fontSize: 16,       
+    lineHeight: 20,
   },
 
   dateBtn: {
@@ -176,13 +178,15 @@ modalBox: {
 
 
 modalOption: {
-  paddingVertical: 14,
-  paddingHorizontal: 18,
+  paddingVertical: 10,
+  paddingHorizontal: 14,
 },
 
 modalOptionText: {
   fontSize: 16,
+  fontWeight: '400',
   color: '#0f172a',
-},
+  lineHeight: 20
+}
 });
 
