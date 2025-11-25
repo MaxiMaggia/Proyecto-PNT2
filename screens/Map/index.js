@@ -64,7 +64,6 @@ export default function MapScreen({ navigation }) {
   
     return () => clearInterval(interval);
   }, []);
-vets
   const { data: list = [], loading } = useFocusData(async () => vetsData, []);
 
   const headerHeight = useMemo(() => insets.top + 64 + 8, [insets.top]);
@@ -93,6 +92,7 @@ vets
     if (url) Linking.openURL(url).catch(() => {});
   };
 
+  // Marcar clínica como destino “en ruta”
   const startDirections = () => {
     if (!selectedVet) return;
     setRoutingTo(selectedVet);
@@ -101,7 +101,7 @@ vets
 
   return (
     <View style={styles.container}>
-      {/* Mapa */}
+      {/* Mapa (placeholder) */}
       <MapViewBase vets={list} onSelectVet={setSelectedVet} userLocation={myPosRef.current} />
 
       {/* Chip “En ruta a …” */}
