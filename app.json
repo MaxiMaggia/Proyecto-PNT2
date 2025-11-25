@@ -28,6 +28,7 @@
       },
       "edgeToEdgeEnabled": true
     },
+    "softwareKeyboardLayoutMode": "pan",
     "web": { "favicon": "./assets/paw.png" }
   }
 }

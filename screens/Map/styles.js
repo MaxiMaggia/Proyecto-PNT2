@@ -70,7 +70,7 @@ export default StyleSheet.create({
     zIndex: 20,
     elevation: 6
   },
-  sheetHandleWrap: { alignItems: 'center', paddingTop: 4, paddingBottom: 6 },
+  sheetHandleWrap: { alignItems: 'center', paddingTop: 4, paddingBottom: 6, width: '100%' },
   sheetHandle: { width: 36, height: 4, borderRadius: 2, backgroundColor: '#2E5B2E' },
   sheetTitle: { fontSize: 20, fontWeight: '800', marginBottom: 8, color: TEXT_PRIMARY },
   loading: { paddingBottom: 12, color: TEXT_SECONDARY },

@@ -1,6 +1,5 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import MapScreen from '../screens/Map';
 import VetDetail from '../screens/VetDetail';
 import PetList from '../screens/PetList';
@@ -19,7 +18,7 @@ const Stack = createNativeStackNavigator();
 export default function AppStack() {
   const showLogoutAlert = useLogoutAlert();
 
-  return (
+  return (  
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, ImageBackground, Image } from 'react-native';
+import { Text, Pressable, ImageBackground } from 'react-native';
 import styles from './styles';
 
 
