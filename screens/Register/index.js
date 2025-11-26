@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 import Toast from 'react-native-toast-message';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -85,11 +85,7 @@ export default function Register({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}
-    >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    
     <View style={styles.container}>
       <Text style={styles.title}>Crear Cuenta</Text>
 
@@ -157,7 +153,5 @@ export default function Register({ navigation }) {
         Ya tengo cuenta → Iniciar Sesión
       </Text>
     </View>
-    </ScrollView>
-    </KeyboardAvoidingView>
   );
 }
