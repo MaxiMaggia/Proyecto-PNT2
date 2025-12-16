@@ -17,16 +17,22 @@
     },
     "ios": { "supportsTablet": true },
     "infoPlist": {
-    "NSAppTransportSecurity": {
-      "NSAllowsArbitraryLoads": true
-    }
-  },
+      "NSAppTransportSecurity": {
+        "NSAllowsArbitraryLoads": true
+      },
+      "NSLocationWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrarte las veterinarias más cercanas.",
+      "NSLocationAlwaysAndWhenInUseUsageDescription": "Esta aplicación necesita acceder a tu ubicación para mostrarte las veterinarias más cercanas."
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/paw.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "softwareKeyboardLayoutMode": "pan",
     "web": { "favicon": "./assets/paw.png" }
