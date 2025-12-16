@@ -11,8 +11,10 @@ import {
   Linking,
   Platform,
   Animated,
+  Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Location from 'expo-location';
 import styles, { DRAG_MAX } from './styles';
 import useFocusData from '../../hooks/useFocusData';
 import vetsData from '../../data/vets';
@@ -40,29 +42,41 @@ export default function MapScreen({ navigation }) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedVet, setSelectedVet] = useState(null);
   const [routingTo, setRoutingTo] = useState(null);
-
-  const myPosRef = useRef({
-    lat: -34.6037,
-    lng: -58.3790,
-  });
-  
-  const [, forceUpdate] = useState(0);
-  const refresh = () => forceUpdate(n => n + 1);
-
-  function moveMyPosition(deltaLat, deltaLng) {
-    myPosRef.current = {
-      lat: myPosRef.current.lat + deltaLat,
-      lng: myPosRef.current.lng + deltaLng,
-    };
-    refresh();
-  }
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      moveMyPosition(0, -0.00005); 
-    }, 1000);
-  
-    return () => clearInterval(interval);
+    (async () => {
+      try {
+        setLocationLoading(true);
+        setLocationError(null);
+
+        // Request location permissions
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        
+        if (status !== 'granted') {
+          setLocationError('Permiso de ubicación denegado. Por favor, habilita el acceso a la ubicación en la configuración de la aplicación.');
+          setLocationLoading(false);
+          return;
+        }
+
+        // Get current location
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+
+        setUserLocation({
+          lat: location.coords.latitude,
+          lng: location.coords.longitude,
+        });
+      } catch (error) {
+        setLocationError('No se pudo obtener la ubicación. Verifica que el GPS esté activado.');
+        console.error('Error getting location:', error);
+      } finally {
+        setLocationLoading(false);
+      }
+    })();
   }, []);
   const { data: list = [], loading } = useFocusData(async () => vetsData, []);
 
@@ -99,10 +113,27 @@ export default function MapScreen({ navigation }) {
     setSelectedVet(null);
   };
 
+  // Show error alert if location failed
+  useEffect(() => {
+    if (locationError && !locationLoading) {
+      Alert.alert(
+        'Error de Ubicación',
+        locationError,
+        [{ text: 'OK' }]
+      );
+    }
+  }, [locationError, locationLoading]);
+
   return (
     <View style={styles.container}>
-      {/* Mapa (placeholder) */}
-      <MapViewBase vets={list} onSelectVet={setSelectedVet} userLocation={myPosRef.current} />
+      {/* Mapa */}
+      {!locationLoading && userLocation ? (
+        <MapViewBase vets={list} onSelectVet={setSelectedVet} userLocation={userLocation} />
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 16, color: '#666' }}>Obteniendo ubicación...</Text>
+        </View>
+      )}
 
       {/* Chip “En ruta a …” */}
       {routingTo && (
